@@ -775,7 +775,7 @@ const ls = {get(k){try{return localStorage.getItem(k)}catch(e){return null}}, se
 const API = 'https://script.google.com/macros/s/AKfycbwmh9Ksw7lm9pYZCy3ao-mvZ5ogKbFM7E66zJIAa5ZvorA6q7FLH8ZlFZvFK9RKHRM-/exec';   // адрес веб-приложения Apps Script (.../exec). Пусто - сайт работает на встроенных данных, редактирование выключено.
 const CK = 'irtysh_school_cache_v2';
 let D = null; try{ D = JSON.parse(ls.get(CK)||'null'); }catch(e){}
-const fixUrl=u=>String(u||'').replace(/^https?:\/\/[\w-]+\.github\.io\/vzlet\/school\/?/i,'./').replace(/^https?:\/\/[\w-]+\.github\.io\/vzlet\/?/i,'vzlet/').replace(/^agro\.html$/i,'agro/');
+const fixUrl=u=>String(u||'').replace(/^https?:\/\/irtysh-sosh\.github\.io\/(?=.)/i,'').replace(/^https?:\/\/[\w-]+\.github\.io\/vzlet\/school\/?/i,'./').replace(/^https?:\/\/[\w-]+\.github\.io\/vzlet\/?/i,'vzlet/').replace(/^agro\.html$/i,'agro/');
 function normalize(){ if(!D||typeof D!=='object') D=structuredClone(DEFAULT); Object.keys(DEFAULT).forEach(k=>{ if(!Array.isArray(D[k])) D[k]=structuredClone(DEFAULT[k]); });
   D.projects.forEach(p=>p.link=fixUrl(p.link)); D.quick.forEach(q=>q.url=fixUrl(q.url)); D.links.forEach(l=>l.url=fixUrl(l.url)); D.clubs.forEach(c=>c.link=fixUrl(c.link)); }
 normalize();
