@@ -123,6 +123,7 @@ button.chip.on{background:color-mix(in srgb,var(--brand) 14%,transparent); color
 .clashpanel{margin:12px 0; padding:14px; border-radius:16px; background:var(--card,rgba(127,127,127,.06)); border:1px solid color-mix(in srgb,#f59e0b 35%,transparent); animation:cpop .25s ease}
 @keyframes cpop{from{opacity:0; transform:translateY(-6px)}}
 .clashes{margin-top:0}
+#brandTitle{user-select:none; -webkit-user-select:none; -webkit-touch-callout:none}
 .clashes div{padding:8px 12px; border-radius:10px; margin-bottom:6px; font-size:14px}
 .clashes .r{background:color-mix(in srgb,var(--bad) 10%,transparent); color:var(--bad)}
 .clashes .y{background:color-mix(in srgb,var(--warn) 12%,transparent); color:var(--warn)}
@@ -543,7 +544,7 @@ body.sgrid .daylist{display:none !important}
       <button class="ibtn edit-only" id="userBtn" title="Редактор"><span class="ni" data-i="user"></span><span class="hide-m" id="userName"></span></button>
       <button class="ibtn" id="shareBtn" title="Поделиться, QR-код, установить на телефон"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3M21 14v.01M14 21h3M21 18v3"/></svg></button>
       <button class="ibtn" id="themeBtn" title="Светлая / тёмная тема"><span class="ni" data-i="moon"></span></button>
-      <button class="ibtn" id="editBtn" title="Вход для редакторов"><span class="ni" data-i="edit"></span></button>
+      <button class="ibtn" id="editBtn" title="Вход для редакторов" style="display:none"><span class="ni" data-i="edit"></span></button>
       </div>
     </div>
     <nav id="nav"><span class="pill" id="pill"></span>
@@ -1312,7 +1313,7 @@ function canItem(it){ return !!USER && (USER.role==='admin' || (!!it && !!it.clu
 function clubTag(id){ const c=id&&D.clubs.find(x=>x.id===id); return c?` <span class="ctag" style="--c:${esc(c.color)}">${esc(c.name)}</span>`:''; }
 function applyUser(){
   document.body.classList.toggle('editing', !!USER); document.body.classList.toggle('admin', !!USER && USER.role==='admin');
-  $('#userName').textContent = USER ? USER.name : ''; $('#editBtn').style.display = USER?'none':'';
+  $('#userName').textContent = USER ? USER.name : ''; $('#editBtn').style.display = (USER || !trustedDev())?'none':'';
   if(!USER) TOKEN=null; saveSess();
   renderAll();
 }
@@ -1322,7 +1323,7 @@ function openLogin(){
     <div class="mbar"><button class="ibtn" onclick="closeM()">Отмена</button><button class="ibtn pri" id="pinGo">Войти</button></div>`;
   openM(); const inp=$('#pin'); setTimeout(()=>inp.focus(),50);
   const go=async()=>{ const pin=inp.value.trim(); if(!pin) return; const b=$('#pinGo'); b.disabled=true; b.textContent='Проверяю…';
-    try{ const j=await api({op:'login',pin}); TOKEN=j.token; USER=j.user; closeM(); applyUser(); toast(`Здравствуйте, ${USER.name}!`); }
+    try{ const j=await api({op:'login',pin}); TOKEN=j.token; USER=j.user; try{ localStorage.setItem('irtysh_editor_dev','1'); }catch(_){} closeM(); applyUser(); toast(`Здравствуйте, ${USER.name}!`); }
     catch(e){ inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake'); inp.value=''; toast(e.message); }
     finally{ if(document.body.contains(b)){ b.disabled=false; b.textContent='Войти'; } } };
   $('#pinGo').onclick=go; inp.onkeydown=e=>{ if(e.key==='Enter') go(); };
@@ -1332,8 +1333,9 @@ function openUserMenu(){
   $('#mbody').innerHTML = `<h3>${esc(USER.name)}</h3><p style="color:var(--dim)">${USER.role==='admin'?'Администратор':'Руководитель'} · может менять: ${esc(mine)}</p>
     <div class="qact">${D.clubs.filter(c=>canEdit(c.id)&&USER.role!=='admin').map(c=>`<button class="ibtn" onclick="closeM();openClubForm('${esc(c.id)}')">${ic('edit',16)} ${esc(c.name)}: описание и расписание</button>`).join('')}
       <button class="ibtn" onclick="closeM();openForm('events')">+ Мероприятие</button><button class="ibtn" onclick="closeM();openForm('achievements')">+ Достижение</button><button class="ibtn" onclick="closeM();openForm('news')">+ Новость</button></div>
-    <div class="mbar"><button class="ibtn admin-only" onclick="openEditors()">${ic('users',16)} Редакторы и PIN</button><button class="ibtn" id="logout">Выйти</button></div>`;
+    <div class="mbar"><button class="ibtn admin-only" onclick="openEditors()">${ic('users',16)} Редакторы и PIN</button><button class="ibtn" id="logout">Выйти</button><button class="ibtn" id="logoutHide" title="Если это чужой или общий компьютер">Выйти и скрыть вход здесь</button></div>`;
   openM(); $('#logout').onclick=()=>{ USER=null; TOKEN=null; closeM(); applyUser(); toast('Вы вышли'); };
+  $('#logoutHide').onclick=()=>{ try{ localStorage.removeItem('irtysh_editor_dev'); }catch(_){} USER=null; TOKEN=null; closeM(); applyUser(); toast('Вы вышли, кнопка входа на этом устройстве скрыта'); };
 }
 async function openEditors(){
   let list; try{ list=(await api({op:'editors'})).editors; }catch(e){ toast(e.message); return; }
@@ -1369,7 +1371,17 @@ function openShare(){
 }
 $('#shareBtn').onclick=openShare;
 if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('/sw.js').catch(()=>{});
-$('#editBtn').onclick=openLogin; $('#userBtn').onclick=openUserMenu;
+$('#editBtn').onclick=openLogin;
+/* Вход спрятан от обычных посетителей: #vhod в адресе, долгое нажатие или 5 быстрых нажатий на название.
+   На устройстве, где уже входили, карандаш виден всегда. */
+function trustedDev(){ try{ return localStorage.getItem('irtysh_editor_dev')==='1'; }catch(e){ return false; } }
+function secretTap(el, fn){ if(!el) return; let t=null, n=0, last=0;
+  el.addEventListener('pointerdown',()=>{ clearTimeout(t); t=setTimeout(()=>{ t=null; fn(); },900); });
+  ['pointerup','pointerleave','pointercancel'].forEach(ev=>el.addEventListener(ev,()=>{ clearTimeout(t); }));
+  el.addEventListener('click',()=>{ const now=Date.now(); n = now-last<600 ? n+1 : 1; last=now; if(n>=5){ n=0; fn(); } });
+  el.addEventListener('contextmenu',e=>e.preventDefault()); }
+secretTap($('#brandTitle'), ()=>{ if(!USER) openLogin(); });
+{ const vh=()=>{ if(location.hash==='#vhod'){ history.replaceState(null,'',location.pathname+location.search); setTimeout(()=>{ if(!USER) openLogin(); },400); } }; vh(); addEventListener('hashchange',vh); } $('#userBtn').onclick=openUserMenu;
 try{ const ss=JSON.parse(sessionStorage.getItem('irtysh_sess')||'null'); if(ss&&ss.token&&API){ TOKEN=ss.token; USER=ss.user; setTimeout(applyUser,0); } }catch(e){}
 function openM(){ $('#modal').classList.add('on'); }
 function closeM(){
