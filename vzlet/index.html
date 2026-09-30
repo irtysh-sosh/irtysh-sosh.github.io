@@ -120,6 +120,11 @@
   .modal{position:fixed; inset:0; background:rgba(0,0,0,.7); display:none; align-items:flex-start; justify-content:center;
     padding:40px 16px; z-index:100; overflow-y:auto;}
   .modal.open{display:flex;}
+  .hlrow,.hlhead{display:grid; grid-template-columns:2fr 1.6fr 1fr 1fr auto; gap:8px; align-items:center; margin-bottom:8px}
+  .hlhead{font-size:12px; color:var(--dim); text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px}
+  .hlrow input,.hlrow select{width:100%; min-width:0}
+  @media (max-width:640px){ .hlhead{display:none} .hlrow{grid-template-columns:1fr 1fr auto; padding:10px; border:1px solid var(--line); border-radius:10px} .hlrow .hl-name{grid-column:1/-1} .hlrow .hl-track{grid-column:1/-1} }
+
   .modal-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; max-width:900px; width:100%; padding:24px; position:relative;}
   .modal-card h2{font-size:20px; margin-bottom:4px;}
   .modal-card .sub{color:var(--dim); font-size:13px; margin-bottom:20px;}
@@ -203,6 +208,7 @@
     <span class="status" id="status"><i></i><span>загрузка…</span></span>
     <button class="btn coach-only" onclick="loadData(true)">↻ Обновить</button>
     <a class="btn coach-only" id="editBtn" target="_blank" href="#" title="Открыть Google Таблицу">▦ Таблица</a>
+    <button class="btn" id="lockBtn" onclick="lockClick()">✎ Войти</button>
     <button class="btn primary" onclick="openModal()">📖 Справка</button>
   </div>
 </header>
@@ -315,8 +321,9 @@
    дашборд у всех сразу открывается с вашими данными.
    ============================================================ */
 const SHEET_ID = '1GNVM7smAVzjOVK77FzJ_HfDQ9lI85DCSt0idMU8GJqk';
-const MODE = 'public';
-const SCRIPT_URL = '';  // адрес Apps Script, через который тренерская версия сохраняет правки   // 'coach' — версия тренера, 'public' — для группы
+const ROLE = (()=>{ try{ return sessionStorage.getItem('vzlet_role')||''; }catch(e){ return ''; } })();  // admin | helper | ''
+const MODE = ROLE==='admin' ? 'coach' : 'public';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDO0jGc8TCvXuDEgbUEIn0N6jPRAD8HcuscR3gSzhLEyYpx4PilYBYmisS7cJICbZ_Pw/exec';  // адрес Apps Script, через который тренерская версия сохраняет правки   // 'coach' — версия тренера, 'public' — для группы
 
 const REFRESH_MIN = 5;            // автообновление, минут
 const LS_KEY = 'vzlet_sheet_id';
@@ -793,6 +800,7 @@ const LONG = new Set(['Текст','Особенности','Задача','Оп
 const HINT = {'Дата':'дд.мм.гггг','Время круга':'00:49.3','Лучший круг':'00:49.3','Рейтинг':'0–100','Время':'18:00','Адрес':'https://…','Налёт, ч':'часы'};
 const todayStr = () => new Date().toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'});
 const PIN_KEY = 'vzlet_pin';
+const ss_ = { get(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }, del(k){ try{ sessionStorage.removeItem(k); }catch(e){} } };
 
 function toast(msg, cls=''){ const t=$('toast'); t.textContent=msg; t.className='show '+cls; clearTimeout(t._t); t._t=setTimeout(()=>t.className='',3000); }
 
@@ -845,12 +853,11 @@ function openEditor(card, sheet){
 
 async function postSheet(sheet, rows){
   if(!SCRIPT_URL || SCRIPT_URL.startsWith('__')) throw new Error('сохранение ещё не подключено');
-  let pin=ls.get(PIN_KEY);
-  if(!pin){ pin=prompt('Введите PIN тренера для сохранения:'); if(!pin) throw new Error('PIN не введён'); }
+  const pin=ss_.get(PIN_KEY);
+  if(!pin){ throw new Error('войдите по PIN (кнопка "Войти" вверху)'); }
   const r=await fetch(SCRIPT_URL,{method:'POST', body:JSON.stringify({key:pin, sheet, rows})});
   const res=await r.json();
-  if(!res.ok){ if(/PIN/i.test(res.error||'')) ls.del(PIN_KEY); throw new Error(res.error||'ошибка'); }
-  ls.set(PIN_KEY,pin);
+  if(!res.ok){ if(/Неверный PIN/i.test(res.error||'')) logout(true); throw new Error(res.error||'ошибка'); }
   data[sheet]=rows; ls.set(CACHE_KEY, JSON.stringify({t:Date.now(), id:sheetId(), data}));
 }
 
@@ -867,7 +874,72 @@ document.querySelectorAll('.tab').forEach(t=> t.onclick=()=>{
   document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
   document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('hidden',p.id!==t.dataset.p));
 });
+/* ---------- вход по PIN: тренер (всё) или помощник (только заезды) ---------- */
+async function api(body){
+  const r=await fetch(SCRIPT_URL,{method:'POST', body:JSON.stringify(body)});
+  return r.json();
+}
+function lockClick(){ ROLE ? logout() : openLogin(); }
+function logout(silent){ ss_.del(PIN_KEY); ss_.del('vzlet_role'); if(!silent) location.reload(); }
+function openLogin(){
+  $('pbody').innerHTML = `<h2>Вход для редактирования</h2><p class="sub">Тренер может менять всё. Помощник - только записывать заезды: ФИО, трассу и время.</p>
+    <form id="lgForm" class="addlap" autocomplete="off"><label>PIN<input id="lgPin" type="password" inputmode="numeric" maxlength="8" placeholder="••••" style="width:140px"></label>
+    <button class="btn primary" id="lgBtn">Войти</button></form><p class="muted" id="lgErr" style="color:#ff7a7a;min-height:18px;margin-top:8px"></p>`;
+  $('pmodal').classList.add('open'); setTimeout(()=>$('lgPin').focus(),50);
+  $('lgForm').onsubmit=async e=>{ e.preventDefault(); const pin=$('lgPin').value.trim(); if(!pin) return;
+    $('lgBtn').disabled=true; $('lgBtn').textContent='Проверяю…';
+    try{ const r=await api({op:'login', key:pin});
+      if(!r.ok) throw new Error(r.error||'ошибка');
+      ss_.set(PIN_KEY,pin); ss_.set('vzlet_role',r.role); location.reload();
+    }catch(err){ $('lgErr').textContent=err.message; $('lgBtn').disabled=false; $('lgBtn').textContent='Войти'; }
+  };
+}
+function initRole(){
+  const b=document.getElementById('lockBtn'); if(!b) return;
+  if(ROLE){ b.textContent=(ROLE==='admin'?'🔓 Тренер':'🔓 Помощник')+' · выйти'; b.title='Выйти из режима редактирования'; }
+  if(ROLE==='helper'){
+    const card=document.querySelector('details[data-tab="Пилоты"]'), chips=document.getElementById('sortChips');
+    if(chips) chips.insertAdjacentHTML('afterend','<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px"><button class="btn primary" onclick="openHelper()">＋ Записать результат</button></div>');
+  }
+}
+function hlRow(){ return `<div class="hlrow"><input class="hl-name" list="hlPilots" placeholder="ФИО участника"><input class="hl-track" list="hlTracks" value="${esc(curTrack||'')}" placeholder="Трасса">
+  <input class="hl-time" placeholder="00:49.3" inputmode="decimal"><select class="hl-fmt"><option>реал</option><option>симулятор</option></select><button class="btn hl-del" title="Убрать строку">✕</button></div>`; }
+function openHelper(){
+  $('pbody').innerHTML = `<h2>Записать результат</h2><p class="sub">Впишите ФИО участника, трассу и время лучшего круга. Новые участники и трассы добавятся в списки сами.</p>
+    <datalist id="hlPilots">${(data['Пилоты']||[]).map(p=>`<option value="${esc(p['Пилот'])}">`).join('')}</datalist>
+    <datalist id="hlTracks">${allTracks().map(t=>`<option value="${esc(t)}">`).join('')}</datalist>
+    <div class="addlap" style="margin-bottom:10px"><label>Дата<input id="hl-date" value="${todayStr()}" style="width:120px"></label></div>
+    <div class="hlhead"><span>ФИО</span><span>Трасса</span><span>Время круга</span><span>Формат</span><span></span></div><div id="hlRows">${hlRow()}</div>
+    <div class="ebar" style="margin-top:12px"><button class="btn" id="hlAdd">+ Ещё строка</button><span class="sp"></span><button class="btn" onclick="closePilot()">Отмена</button><button class="btn primary" id="hlSave">Сохранить</button></div>`;
+  const style=el=>el.querySelectorAll('input,select').forEach(i=>i.style.cssText+=';font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px');
+  const bind=tr=>{ style(tr); tr.querySelector('.hl-del').onclick=()=>{ if($('hlRows').children.length>1) tr.remove(); };
+    const t=tr.querySelector('.hl-track'), f=tr.querySelector('.hl-fmt'), sync=()=>{ const v=trackFmt(t.value.trim()); if(v) f.value=v; }; t.onchange=sync; sync(); };
+  style($('pbody')); [...$('hlRows').children].forEach(bind);
+  $('hlAdd').onclick=()=>{ const last=$('hlRows').lastElementChild; $('hlRows').insertAdjacentHTML('beforeend',hlRow()); const tr=$('hlRows').lastElementChild;
+    if(last){ tr.querySelector('.hl-track').value=last.querySelector('.hl-track').value; } bind(tr); tr.querySelector('.hl-name').focus(); };
+  $('pmodal').classList.add('open'); setTimeout(()=>$('hlRows').querySelector('.hl-name').focus(),50);
+  $('hlSave').onclick=async()=>{
+    const d=$('hl-date').value.trim(), add=[];
+    for(const tr of $('hlRows').children){
+      const n=tr.querySelector('.hl-name').value.trim(), t=tr.querySelector('.hl-track').value.trim(), tm=tr.querySelector('.hl-time').value.trim().replace(',','.');
+      if(!n && !tm) continue;
+      if(!n || !t){ toast('Укажите ФИО и трассу в каждой строке','bad'); return; }
+      if(!lapSec(tm)){ toast(`Проверьте время у "${n}" - пример 00:49.3`,'bad'); return; }
+      add.push({'Дата':d,'Пилот':n,'Трасса':t,'Время круга':tm,'Формат':tr.querySelector('.hl-fmt').value,'Аварии':'0'});
+    }
+    if(!add.length){ toast('Нечего сохранять','bad'); return; }
+    const btn=$('hlSave'); btn.disabled=true; btn.textContent='Сохраняю…';
+    try{ const r=await api({op:'addLaps', key:ss_.get(PIN_KEY), laps:add});
+      if(!r.ok){ if(/Неверный PIN/i.test(r.error||'')) logout(true); throw new Error(r.error||'ошибка'); }
+      data['Заезды']=[...(data['Заезды']||[]),...r.laps]; data['Пилоты']=[...(data['Пилоты']||[]),...r.pilots]; data['Трассы']=[...(data['Трассы']||[]),...r.tracks];
+      ls.set(CACHE_KEY, JSON.stringify({t:Date.now(), id:sheetId(), data}));
+      curTrack=add[add.length-1]['Трасса']; closePilot(); renderAll(); toast(`Сохранено: ${add.length} ✓`,'ok');
+    }catch(e){ toast('Не сохранилось: '+e.message,'bad'); btn.disabled=false; btn.textContent='Сохранить'; }
+  };
+}
+
 applyMode();
+initRole();
 loadData();
 setInterval(()=>{ if(sheetId() && !document.hidden && !document.querySelector('.editing')) loadData(); }, REFRESH_MIN*60*1000);
 </script>
