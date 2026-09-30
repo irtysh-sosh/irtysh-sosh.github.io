@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Иртышская СОШ - кружки и события</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700&family=Marck+Script&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700&family=Marck+Script&family=Share+Tech+Mono&display=swap" rel="stylesheet" media="print" onload="this.media=\'all\'"><noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700&family=Marck+Script&family=Share+Tech+Mono&display=swap" rel="stylesheet"></noscript>
 <style>
 :root{
   --bg:#f4f6fb; --bg2:#eaeef7; --card:#ffffff; --line:#e1e6f0; --text:#16213a; --dim:#63708a;
@@ -1076,7 +1076,8 @@ function initRing(){
   addEventListener('pointerup',()=>{ if(x0===null) return; x0=null; ring.classList.remove('drag'); const n=D.clubs.length; ringIdx=(((Math.round(ringIdx+dragOff))%n)+n)%n; dragOff=0; layoutRing(); });
   ring.addEventListener('click',e=>{ if(moved){ e.stopPropagation(); e.preventDefault(); moved=false; return; }
     const c=e.target.closest('.club'); if(!c) return; e.stopPropagation(); const i=[...ring.children].indexOf(c);
-    if(i!==ringIdx){ ringIdx=i; layoutRing(); } else openClub(c.dataset.id,c); }, true);
+    const cc=club(c.dataset.id), goes=cc.link&&!ext(cc.link)&&!USER;
+    if(i!==ringIdx && !goes){ ringIdx=i; layoutRing(); } else openClub(c.dataset.id,c,e); }, true);
   $('#rPrev').onclick=()=>spin(-1); $('#rNext').onclick=()=>spin(1);
   document.querySelectorAll('#clubMode button').forEach(b=>b.onclick=()=>{ clubMode=b.dataset.m; document.querySelectorAll('#clubMode button').forEach(x=>x.classList.toggle('on',x===b));
     vt(()=>{ $('#ringWrap').classList.toggle('hidden',clubMode!=='ring'); $('#clubGrid').classList.toggle('hidden',clubMode==='ring'); revealAll(); layoutRing(); }); });
@@ -1088,9 +1089,10 @@ function renderClubs(){
   $('#clubGrid').innerHTML = D.clubs.map(c=>clubHTML(c,false)).join('') + `<div class="card addcard admin-only blockish" onclick="openClubForm()">+ Добавить кружок</div>`;
   bindClubs('#clubGrid');
 }
-function bindClubs(sel){ document.querySelectorAll(sel+' .club').forEach(e=>e.onclick=()=>openClub(e.dataset.id,e)); if(matchMedia('(hover:hover)').matches) tilt(sel); }
+function bindClubs(sel){ document.querySelectorAll(sel+' .club').forEach(e=>e.onclick=ev=>openClub(e.dataset.id,e,ev)); if(matchMedia('(hover:hover)').matches) tilt(sel); }
 let morphEl=null;
-function openClub(id, fromEl){
+function openClub(id, fromEl, ev){
+  { const c=club(id); if(c&&c.link&&!ext(c.link)&&!USER){ dive(ev||null,c.link); return; } }
   if(fromEl && document.startViewTransition){
     morphEl=fromEl; fromEl.style.viewTransitionName='morph';
     const t=document.startViewTransition(()=>{ fromEl.style.viewTransitionName=''; fillClub(id); $('#modal .mcard').style.viewTransitionName='morph'; openM(); });
