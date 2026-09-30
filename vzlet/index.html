@@ -871,5 +871,7 @@ applyMode();
 loadData();
 setInterval(()=>{ if(sheetId() && !document.hidden && !document.querySelector('.editing')) loadData(); }, REFRESH_MIN*60*1000);
 </script>
+<a id="toSchool" href="../" title="На сайт школы">&#8592; Школа</a>
+<style>#toSchool{position:fixed; left:14px; bottom:14px; z-index:9999; display:inline-flex; align-items:center; gap:6px; padding:10px 16px; border-radius:999px; font:700 14px system-ui,sans-serif; text-decoration:none; color:#fff; background:linear-gradient(135deg,#3b5bfd,#8b5cf6); box-shadow:0 8px 22px rgba(59,91,253,.4); transition:transform .2s}#toSchool:hover{transform:translateY(-2px)}@media print{#toSchool{display:none}}</style>
 </body>
 </html>
