@@ -115,7 +115,14 @@ button.chip.on{background:color-mix(in srgb,var(--brand) 14%,transparent); color
 .blk.tent{background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.18) 0 6px,transparent 6px 12px)}
 .blk.clash{outline:3px solid var(--bad); outline-offset:1px}
 .blk.dim{opacity:.18}
-.clashes{margin-top:12px}
+.warnbtn{position:relative; width:38px; height:38px; border-radius:50%; border:0; cursor:pointer; font-family:inherit; font-weight:900; font-size:21px; line-height:1; color:#422006; background:linear-gradient(135deg,#fde047,#f59e0b); box-shadow:0 4px 14px rgba(245,158,11,.45); animation:wpulse 2.4s ease-in-out infinite; flex:none}
+.warnbtn i{position:absolute; top:-5px; right:-5px; min-width:18px; height:18px; border-radius:9px; background:#ef4444; color:#fff; font-size:11px; font-weight:800; line-height:18px; font-style:normal; padding:0 4px}
+.warnbtn i:empty{display:none}
+.warnbtn[aria-expanded="true"]{animation:none; box-shadow:0 0 0 3px color-mix(in srgb,#f59e0b 40%,transparent)}
+@keyframes wpulse{50%{box-shadow:0 4px 22px rgba(245,158,11,.8)}}
+.clashpanel{margin:12px 0; padding:14px; border-radius:16px; background:var(--card,rgba(127,127,127,.06)); border:1px solid color-mix(in srgb,#f59e0b 35%,transparent); animation:cpop .25s ease}
+@keyframes cpop{from{opacity:0; transform:translateY(-6px)}}
+.clashes{margin-top:0}
 .clashes div{padding:8px 12px; border-radius:10px; margin-bottom:6px; font-size:14px}
 .clashes .r{background:color-mix(in srgb,var(--bad) 10%,transparent); color:var(--bad)}
 .clashes .y{background:color-mix(in srgb,var(--warn) 12%,transparent); color:var(--warn)}
@@ -605,7 +612,7 @@ body.sgrid .daylist{display:none !important}
   <section class="view" id="v-sched">
     <h2 class="sec">Расписание кружков на неделю</h2>
     <div class="sched-top">
-      <span id="clashStatus" class="status"></span>
+      <button id="clashStatus" class="warnbtn" hidden title="Накладки в расписании" aria-expanded="false">!<i></i></button>
       <div class="seg smodes" id="schedMode">
         <button data-m="days" class="on">По дням</button><button data-m="day">Один день</button><button data-m="clubs">По кружкам</button><button data-m="teachers">По педагогам</button>
       </div>
@@ -613,10 +620,11 @@ body.sgrid .daylist{display:none !important}
       <label style="font-size:14px;font-weight:700">Класс:
         <select id="fClass"><option value="">все</option></select></label>
     </div>
+    <div class="clashpanel" id="clashPanel" hidden><div class="clashes" id="clashes"></div>
+      <p style="color:var(--dim);font-size:13px;margin-top:8px">Штриховка - время ещё уточняется. Красная рамка - накладка: один кабинет или один руководитель в одно время.</p></div>
     <div class="stools" id="sTools"></div>
     <div id="schedView"></div>
-    <div class="clashes" id="clashes"></div>
-    <p style="color:var(--dim);font-size:13px;margin-top:8px">Штриховка - время ещё уточняется. Красная рамка - накладка: один кабинет или один руководитель в одно время.</p>
+
   </section>
 
   <!-- НАЙДИ КРУЖОК -->
@@ -1140,7 +1148,7 @@ function schedData(){ const fc=+$('#fClass').value||0; return {fc, ok:s=>{ if(!f
 function renderSched(){
   const cl=findClashes(), red=new Set(); cl.filter(c=>c.lvl==='r').forEach(c=>{red.add(c.i);red.add(c.j)});
   const nr=cl.filter(c=>c.lvl==='r').length;
-  $('#clashStatus').className='status '+(nr?'bad':'ok'); $('#clashStatus').textContent = nr?`⚠ Накладок: ${nr}`:'✓ Накладок нет';
+  { const w=$('#clashStatus'); w.hidden=!cl.length; w.classList.toggle('red',nr>0); w.querySelector('i').textContent=nr||''; w.title=nr?`Накладок: ${nr} - нажмите, чтобы посмотреть`:'Совпадения по времени - нажмите, чтобы посмотреть'; if(!cl.length) $('#clashPanel').hidden=true; }
   const cy=cl.filter(c=>c.lvl==='y'); $('#clashes').innerHTML = cl.filter(c=>c.lvl==='r').map(c=>`<div class="r">⛔ ${esc(c.text)}</div>`).join('') + (cy.length?`<details class="ydet"><summary>⚠ Совпадения по времени для одних классов: ${cy.length} (ребёнок не сможет ходить на оба)</summary>${cy.map(c=>`<div class="y">${esc(c.text)}</div>`).join('')}</details>`:'');
   document.querySelectorAll('#schedMode button').forEach(x=>x.classList.toggle('on',x.dataset.m===SM));
   const {fc,ok}=schedData(), td=dayName(new Date()), V=$('#schedView'), T=$('#sTools');
@@ -1173,6 +1181,7 @@ function renderSched(){
   }
   V.querySelectorAll('.ditem, .drow, .cclub[data-id] .cch').forEach(e=>e.onclick=()=>openClub(e.dataset.id||e.closest('[data-id]').dataset.id));
 }
+$('#clashStatus').onclick=()=>{ const pn=$('#clashPanel'); pn.hidden=!pn.hidden; $('#clashStatus').setAttribute('aria-expanded',String(!pn.hidden)); };
 document.querySelectorAll('#schedMode button').forEach(b=>b.onclick=()=>{ SM=b.dataset.m; saveS(); vt(()=>renderSched()); });
 (function(){ const s=$('#fClass'); for(let k=1;k<=11;k++) s.insertAdjacentHTML('beforeend',`<option value="${k}">${k} класс</option>`); s.onchange=renderSched; })();
 
