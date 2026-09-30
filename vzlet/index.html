@@ -120,6 +120,7 @@
   .modal{position:fixed; inset:0; background:rgba(0,0,0,.7); display:none; align-items:flex-start; justify-content:center;
     padding:40px 16px; z-index:100; overflow-y:auto;}
   .modal.open{display:flex;}
+  .logo-badge{user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; cursor:default}
   .hlrow,.hlhead{display:grid; grid-template-columns:2fr 1.6fr 1fr 1fr auto; gap:8px; align-items:center; margin-bottom:8px}
   .hlhead{font-size:12px; color:var(--dim); text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px}
   .hlrow input,.hlrow select{width:100%; min-width:0}
@@ -208,7 +209,7 @@
     <span class="status" id="status"><i></i><span>загрузка…</span></span>
     <button class="btn coach-only" onclick="loadData(true)">↻ Обновить</button>
     <a class="btn coach-only" id="editBtn" target="_blank" href="#" title="Открыть Google Таблицу">▦ Таблица</a>
-    <button class="btn" id="lockBtn" onclick="lockClick()">✎ Войти</button>
+    <button class="btn" id="lockBtn" onclick="lockClick()" style="display:none">✎ Войти</button>
     <button class="btn primary" onclick="openModal()">📖 Справка</button>
   </div>
 </header>
@@ -879,8 +880,18 @@ async function api(body){
   const r=await fetch(SCRIPT_URL,{method:'POST', body:JSON.stringify(body)});
   return r.json();
 }
-function lockClick(){ ROLE ? logout() : openLogin(); }
-function logout(silent){ ss_.del(PIN_KEY); ss_.del('vzlet_role'); if(!silent) location.reload(); }
+function lockClick(){ ROLE ? openLogout() : openLogin(); }
+function openLogout(){
+  $('pbody').innerHTML = `<h2>${ROLE==='admin'?'Тренер':'Помощник'}</h2><p class="sub">Вы в режиме редактирования.</p>
+    <div class="ebar"><button class="btn" onclick="closePilot()">Отмена</button><span class="sp"></span><button class="btn" onclick="logout(false,true)" title="Если это чужой или общий компьютер">Выйти и скрыть вход здесь</button><button class="btn primary" onclick="logout()">Выйти</button></div>`;
+  $('pmodal').classList.add('open'); }
+function logout(silent, hide){ ss_.del(PIN_KEY); ss_.del('vzlet_role'); if(hide) ls.del('vzlet_editor_dev'); if(!silent) location.reload(); }
+function trustedDev(){ return ls.get('vzlet_editor_dev')==='1'; }
+function secretTap(el, fn){ if(!el) return; let t=null, n=0, last=0;
+  el.addEventListener('pointerdown',()=>{ clearTimeout(t); t=setTimeout(()=>{ t=null; fn(); },900); });
+  ['pointerup','pointerleave','pointercancel'].forEach(ev=>el.addEventListener(ev,()=>clearTimeout(t)));
+  el.addEventListener('click',()=>{ const now=Date.now(); n = now-last<600 ? n+1 : 1; last=now; if(n>=5){ n=0; fn(); } });
+  el.addEventListener('contextmenu',e=>e.preventDefault()); }
 function openLogin(){
   $('pbody').innerHTML = `<h2>Вход для редактирования</h2><p class="sub">Тренер может менять всё. Помощник - только записывать заезды: ФИО, трассу и время.</p>
     <form id="lgForm" class="addlap" autocomplete="off"><label>PIN<input id="lgPin" type="password" inputmode="numeric" maxlength="8" placeholder="••••" style="width:140px"></label>
@@ -890,12 +901,15 @@ function openLogin(){
     $('lgBtn').disabled=true; $('lgBtn').textContent='Проверяю…';
     try{ const r=await api({op:'login', key:pin});
       if(!r.ok) throw new Error(r.error||'ошибка');
-      ss_.set(PIN_KEY,pin); ss_.set('vzlet_role',r.role); location.reload();
+      ss_.set(PIN_KEY,pin); ss_.set('vzlet_role',r.role); ls.set('vzlet_editor_dev','1'); location.reload();
     }catch(err){ $('lgErr').textContent=err.message; $('lgBtn').disabled=false; $('lgBtn').textContent='Войти'; }
   };
 }
 function initRole(){
   const b=document.getElementById('lockBtn'); if(!b) return;
+  if(ROLE || trustedDev()) b.style.display='';
+  secretTap(document.querySelector('.logo-badge'), ()=>{ if(!ROLE) openLogin(); });
+  const vh=()=>{ if(location.hash==='#vhod'){ history.replaceState(null,'',location.pathname+location.search); if(!ROLE) setTimeout(openLogin,300); } }; vh(); addEventListener('hashchange',vh);
   if(ROLE){ b.textContent=(ROLE==='admin'?'🔓 Тренер':'🔓 Помощник')+' · выйти'; b.title='Выйти из режима редактирования'; }
   if(ROLE==='helper'){
     const card=document.querySelector('details[data-tab="Пилоты"]'), chips=document.getElementById('sortChips');
