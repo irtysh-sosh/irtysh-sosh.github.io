@@ -468,7 +468,7 @@ label>.fsel,.form .fsel,.edrow .fsel,.srow .fsel{display:block}
 body.sgrid #week.hidden-m{display:grid} body.sgrid .daylist{display:none}
 .daylist{display:grid !important; grid-template-columns:repeat(3,1fr); gap:12px; align-items:start}
 body.sgrid .daylist{display:none !important}
-@media(max-width:1000px){ .daylist{grid-template-columns:1fr 1fr} } @media(max-width:760px){ .daylist{grid-template-columns:1fr} #schedMode{display:none} body.sgrid #week.hidden-m{display:none} body.sgrid .daylist{display:grid !important} }
+@media(max-width:1000px){ .daylist{grid-template-columns:1fr 1fr} } @media(max-width:760px){ .daylist{grid-template-columns:1fr} }
 .dayc .drow{align-items:flex-start} .dayc .drow .tm{min-width:92px}
 .sched-top .seg{margin-left:6px}
 .sched-top .seg{margin-bottom:0}
@@ -476,6 +476,34 @@ body.sgrid .daylist{display:none !important}
 .sgrp{background:var(--bg2); border-radius:14px; padding:10px 12px}
 .sgh{margin-bottom:6px} .sgh b{display:block; font-size:14px} .sgh small{color:var(--dim); font-size:12px}
 .sgr{display:flex; gap:10px; font:600 14px Manrope,sans-serif; padding:3px 0} .sgr span:first-child{width:28px; color:var(--brand); font-weight:800}
+
+/* ===== расписание: режимы и сетка с масштабом ===== */
+.smodes{flex-wrap:wrap}
+.stools{display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; margin:4px 0 12px}
+.stools:empty{display:none}
+.zoom{display:flex; align-items:center; gap:8px} .zoom input{width:160px; accent-color:var(--brand)} .zoom small{color:var(--dim); font-size:12px}
+.daypick{margin:0}
+.gwrap{overflow-x:auto; border-radius:var(--r); box-shadow:var(--shadow); background:var(--card); border:1px solid var(--line)}
+.week2{display:grid; grid-template-columns:54px repeat(var(--cols),minmax(var(--colw),1fr)); min-width:calc(54px + var(--cols)*var(--colw))}
+.week2.one{grid-template-columns:54px 1fr; min-width:0}
+.week2 .dh{position:sticky; top:0; z-index:3; background:var(--bg2); text-align:center; font-weight:800; padding:8px 0; font-size:14px; border-bottom:1px solid var(--line)}
+.week2 .dh.today{background:linear-gradient(135deg,var(--brand),var(--brand2)); color:#fff}
+.week2 .hrs{position:relative} .week2 .hrs .hr{position:absolute; left:6px; font-size:11px; color:var(--dim); transform:translateY(-6px)}
+.week2 .tc{position:relative; border-left:1px solid var(--line)} .week2 .tc .hr{position:absolute; left:0; right:0; border-top:1px solid var(--line)} .week2 .tc .hr.half{border-top-style:dashed; opacity:.5}
+.week2 .blk{transition:transform .15s, box-shadow .15s, z-index 0s} .week2 .blk:hover{transform:scale(1.04); z-index:5; box-shadow:0 10px 24px rgba(0,0,0,.3)}
+.week2 .blk .bt{display:block; font-size:11.5px; opacity:.95}
+.week2 .blk.tiny b{white-space:nowrap; overflow:hidden; text-overflow:ellipsis} .week2 .blk.tiny i{display:none}
+.week2.one .blk{font-size:13.5px; padding:8px 10px} .week2.one .blk b{font-size:15px}
+.ghandle{height:18px; display:flex; justify-content:center; align-items:center; cursor:ns-resize; touch-action:none; margin-top:4px}
+.ghandle span{width:64px; height:6px; border-radius:6px; background:var(--line)} .ghandle:hover span{background:var(--brand)}
+.cbox{display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:12px; align-items:start}
+.cclub .cch{display:flex; gap:12px; align-items:center; cursor:pointer} .cclub .cch b{display:block; font-size:16px} .cclub .cch small{color:var(--dim)}
+.tav{width:44px; height:44px; border-radius:14px; display:grid; place-items:center; font-weight:800; color:#fff; background:linear-gradient(135deg,var(--brand),var(--brand2)); flex-shrink:0}
+.tday{display:grid; grid-template-columns:34px 1fr; gap:6px; margin-top:8px} .tday>span{font-weight:800; color:var(--brand); padding-top:8px}
+.sv-days .daylist{display:grid !important}
+@media(max-width:760px){ .smodes button{padding:6px 10px; font-size:12px} .zoom small{display:none} .cbox{grid-template-columns:1fr} }
+.drow.lnk{text-decoration:none; color:inherit; cursor:pointer; border-radius:10px; transition:background .2s} .drow.lnk:hover{background:var(--bg2)} .drow .go{color:var(--brand); font-weight:800}
+.ibtn.big{height:46px; padding:0 20px; font-size:15px}
 </style>
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#5b4bfd">
@@ -570,13 +598,15 @@ body.sgrid .daylist{display:none !important}
     <h2 class="sec">Расписание кружков на неделю</h2>
     <div class="sched-top">
       <span id="clashStatus" class="status"></span>
-      <div class="seg" id="schedMode"><button data-m="list" class="on">По дням</button><button data-m="grid">Сетка</button></div>
+      <div class="seg smodes" id="schedMode">
+        <button data-m="days" class="on">По дням</button><button data-m="grid">Сетка</button><button data-m="day">Один день</button><button data-m="clubs">По кружкам</button><button data-m="teachers">По педагогам</button>
+      </div>
       <span style="flex:1"></span>
       <label style="font-size:14px;font-weight:700">Класс:
         <select id="fClass"><option value="">все</option></select></label>
     </div>
-    <div class="week hidden-m" id="week"></div>
-    <div class="daylist" id="daylist"></div>
+    <div class="stools" id="sTools"></div>
+    <div id="schedView"></div>
     <div class="clashes" id="clashes"></div>
     <p style="color:var(--dim);font-size:13px;margin-top:8px">Штриховка - время ещё уточняется. Красная рамка - накладка: один кабинет или один руководитель в одно время.</p>
   </section>
@@ -904,7 +934,9 @@ const TILES=[
   {v:'events', e:'mega', t:'События', g:'#f97316,#ec4899'},
   {v:'find', e:'search', t:'Найди кружок', g:'#10b981,#06b6d4'},
   {v:'ach', e:'trophy', t:'Достижения', g:'#f59e0b,#ef4444'},
-  {v:'proj', e:'users', t:'Проекты', g:'#8b5cf6,#ec4899'}
+  {v:'proj', e:'users', t:'Проекты', g:'#8b5cf6,#ec4899'},
+  {v:'agro', e:'leaf', t:'Агрокласс', g:'#15803d,#84cc16', href:'agro/'},
+  {v:'vzlet', e:'drone', t:'Клуб БПЛА "Взлёт"', g:'#0e7490,#22d3ee', href:'vzlet/'}
 ];
 function tilePreview(v){
   if(v==='clubs') return D.clubs.map(c=>`<div class="drow"><span class="thumb">${artSVG(c)}</span><b style="flex:1">${esc(c.name)}</b><small style="color:var(--dim)">${esc(c.classes)} кл.</small></div>`).join('');
@@ -912,12 +944,15 @@ function tilePreview(v){
   if(v==='events') return evHTML(upcoming().slice(0,3)) || '<p style="color:var(--dim)">Событий нет</p>';
   if(v==='find') return '<p>Выберите класс и интересы - и мы подскажем подходящие кружки со временем занятий.</p>';
   if(v==='ach') return D.achievements.map(a=>`<div class="drow">${medal(a.medal)}<span><b>${esc(a.title)}</b><br><small style="color:var(--dim)">${esc(a.who)}</small></span></div>`).join('');
-  if(v==='proj') return D.projects.map(p=>`<div class="drow"><b style="flex:1">${esc(p.name)}</b>${p.support?`<small style="color:var(--ok)">${esc(p.support)}</small>`:''}</div>`).join('');
+  if(v==='proj') return D.projects.map(p=>{ const inner=`<b style="flex:1">${esc(p.name)}</b>${p.support?`<small style="color:var(--ok)">${esc(p.support)}</small>`:''}${p.link?'<span class="go">→</span>':''}`;
+    return p.link?`<a class="drow lnk" href="${esc(p.link)}" ${ext(p.link)?'target="_blank" rel="noopener"':'data-dive'}>${inner}</a>`:`<div class="drow">${inner}</div>`; }).join('');
+  if(v==='agro') return '<p>Беспилотные авиасистемы в АПК для 8-9 классов: 10 модулей с видеоуроками и тестами, лаборатория Python и промпт-инжиниринг.</p>';
+  if(v==='vzlet'){ const sl=clubSlots('vzlet'); return `<p>FPV-пилотирование: симулятор, полёты, гонки дронов. Рейтинг пилотов, трассы и задачи клуба.</p>${sl.map(s=>`<div class="drow"><span class="tm">${s.day}</span>${s.start}-${s.end}</div>`).join('')}`; }
   return '';
 }
 function tileSub(v){
   const n={clubs:D.clubs.length+' '+plural(D.clubs.length,'кружок','кружка','кружков'), sched:todaySlots().length+' '+plural(todaySlots().length,'занятие','занятия','занятий')+' сегодня',
-    events:upcoming().length+' впереди', find:'подбор за 10 секунд', ach:D.achievements.length+' '+plural(D.achievements.length,'победа','победы','побед'), proj:D.projects.length+' '+plural(D.projects.length,'проект','проекта','проектов')};
+    events:upcoming().length+' впереди', find:'подбор за 10 секунд', ach:D.achievements.length+' '+plural(D.achievements.length,'победа','победы','побед'), agro:'10 модулей · 8-9 классы', vzlet:'рейтинг и трассы', proj:D.projects.length+' '+plural(D.projects.length,'проект','проекта','проектов')};
   return n[v]||'';
 }
 let openTile=null;
@@ -927,7 +962,7 @@ function renderTiles(){
   TILES.forEach((t,i)=>{
     h+=`<button class="tile ${openTile===t.v?'open':''}" data-v="${t.v}" style="background:linear-gradient(135deg,${t.g})"><span class="te">${ic(t.e,24)}</span><span class="tbig">${ic(t.e,110)}</span><b>${t.t}</b><small>${tileSub(t.v)}</small></button>`;
     if((i+1)%cols===0 || i===TILES.length-1){ const row=TILES.slice(i+1-((i%cols)+1), i+1).map(x=>x.v); const ot=row.includes(openTile)?openTile:null;
-      h+=`<div class="drop ${ot?'open':''}" data-row="${row.join(',')}"><div>${ot?`<div class="card">${tilePreview(ot)}<button class="ibtn pri dive" onclick="go('${ot}')">Открыть раздел →</button></div>`:''}</div></div>`; }
+      h+=`<div class="drop ${ot?'open':''}" data-row="${row.join(',')}"><div>${ot?`<div class="card">${tilePreview(ot)}${(TILES.find(t=>t.v===ot)||{}).href?`<a class="ibtn pri dive" href="${TILES.find(t=>t.v===ot).href}" data-dive>Перейти →</a>`:`<button class="ibtn pri dive" onclick="go('${ot}')">Открыть раздел →</button>`}</div>`:''}</div></div>`; }
   });
   $('#tiles').innerHTML=h;
   document.querySelectorAll('#tiles .tile').forEach(b=>b.onclick=()=>{ openTile = openTile===b.dataset.v?null:b.dataset.v; renderTiles(); });
@@ -1061,7 +1096,7 @@ function fillClub(id){
     <div class="chips" style="margin-bottom:14px">${(c.tags||[]).map(t=>`<span class="chip">${esc(t)}</span>`).join('')}</div>
     <b style="display:flex;gap:8px;align-items:center">${ic('clock',18)} Расписание</b>
     ${sl.length?slotGroupsHTML(sl):'<p class="tbd">уточняется</p>'}
-    <div class="mbar">${c.link?`<a class="ibtn pri" href="${esc(c.link)}" target="_blank" rel="noopener">Страница кружка →</a>`:''}
+    <div class="mbar">${c.link?`<a class="ibtn pri big" href="${esc(c.link)}" ${ext(c.link)?'target="_blank" rel="noopener"':'data-dive'}>Открыть страницу кружка →</a>`:''}
       ${canEdit(id)?`<button class="ibtn" onclick="openClubForm('${esc(id)}')">${ic('edit',16)} Изменить</button>`:''}</div>`;
 }
 
@@ -1083,29 +1118,61 @@ function findClashes(){
   }
   return out;
 }
+let SM='days', SZ=1.6, SDAY=null;
+try{ SM=localStorage.getItem('irtysh_sched_mode2')||'days'; SZ=+localStorage.getItem('irtysh_sched_zoom')||1.6; }catch(e){}
+const saveS=()=>{ try{ localStorage.setItem('irtysh_sched_mode2',SM); localStorage.setItem('irtysh_sched_zoom',SZ); }catch(e){} };
+function schedData(){ const fc=+$('#fClass').value||0; return {fc, ok:s=>{ if(!fc) return true; const [a,b]=slotRange(s); return fc>=a&&fc<=b; }}; }
 function renderSched(){
-  const fc=+$('#fClass').value||0, cl=findClashes(), red=new Set(); cl.filter(c=>c.lvl==='r').forEach(c=>{red.add(c.i);red.add(c.j)});
+  const cl=findClashes(), red=new Set(); cl.filter(c=>c.lvl==='r').forEach(c=>{red.add(c.i);red.add(c.j)});
   const nr=cl.filter(c=>c.lvl==='r').length;
   $('#clashStatus').className='status '+(nr?'bad':'ok'); $('#clashStatus').textContent = nr?`⚠ Накладок: ${nr}`:'✓ Накладок нет';
   const cy=cl.filter(c=>c.lvl==='y'); $('#clashes').innerHTML = cl.filter(c=>c.lvl==='r').map(c=>`<div class="r">⛔ ${esc(c.text)}</div>`).join('') + (cy.length?`<details class="ydet"><summary>⚠ Совпадения по времени для одних классов: ${cy.length} (ребёнок не сможет ходить на оба)</summary>${cy.map(c=>`<div class="y">${esc(c.text)}</div>`).join('')}</details>`:'');
-  const times=D.schedule.flatMap(s=>[toMin(s.start),toMin(s.end)]);
-  const t0=Math.floor(Math.min(13*60,...times)/60)*60, t1=Math.ceil(Math.max(19*60,...times)/60)*60, PX=1.25, H=(t1-t0)*PX;
-  const td=dayName(new Date());
-  let html=`<div class="dh"></div>`+DAYS.map(d=>`<div class="dh ${d===td?'today':''}">${d}</div>`).join('');
-  html+=`<div class="hrs" style="height:${H}px">${Array.from({length:(t1-t0)/60+1},(_,k)=>`<div class="hr" style="top:${k*60*PX}px">${(t0/60+k)}:00</div>`).join('')}</div>`;
-  DAYS.forEach(d=>{
-    html+=`<div class="tc" style="height:${H}px">${Array.from({length:(t1-t0)/60},(_,k)=>`<div class="hr" style="top:${k*60*PX}px"></div>`).join('')}`+
-      lanes(D.schedule.map((s,i)=>({s,i})).filter(o=>o.s.day===d)).map(({s,i,lane,of})=>{ const c=club(s.club), [a,b]=slotRange(s), dim=fc&&(fc<a||fc>b), grp=String(s.room||'').split('·').pop().trim();
-        return `<div class="blk ${s.tent?'tent':''} ${red.has(i)?'clash':''} ${dim?'dim':''}" data-id="${esc(s.club)}" title="${esc(c.name)} · ${s.start}-${s.end}${s.room?' · '+esc(s.room):''}" style="top:${(toMin(s.start)-t0)*PX}px;height:${(toMin(s.end)-toMin(s.start))*PX-3}px;left:calc(${lane*100/of}% + 2px);width:calc(${100/of}% - 4px);right:auto;background-color:${c.color}">
-          <b>${esc(c.name)}</b>${s.start}-${s.end}${grp?`<i>${esc(grp)}</i>`:''}</div>`; }).join('')+`</div>`;
-  });
-  $('#week').innerHTML=html;
-  $('#daylist').innerHTML = DAYS.map(d=>{ const arr=D.schedule.filter(s=>s.day===d).filter(s=>{const [a,b]=slotRange(s); return !fc||(fc>=a&&fc<=b);}).sort((a,b)=>toMin(a.start)-toMin(b.start));
-    return arr.length?`<div class="card dayc"><h5>${d}${d===td?' · сегодня':''}</h5>${arr.map(s=>{const c=club(s.club); return `<div class="drow" data-id="${esc(s.club)}"><span class="tm">${s.start}-${s.end}</span><span class="thumb">${artSVG(c)}</span><span>${esc(c.name)}${s.room?` <small style="color:var(--dim)">· ${esc(s.room)}</small>`:''}${s.tent?' <span class="tbd">· уточн.</span>':''}</span></div>`}).join('')}</div>`:''; }).join('');
-  document.querySelectorAll('#week .blk, #daylist .drow').forEach(e=>e.onclick=()=>openClub(e.dataset.id));
+  document.querySelectorAll('#schedMode button').forEach(x=>x.classList.toggle('on',x.dataset.m===SM));
+  const {fc,ok}=schedData(), td=dayName(new Date()), V=$('#schedView'), T=$('#sTools');
+  T.innerHTML=''; V.className='sv-'+SM;
+  if(SM==='grid'||SM==='day'){
+    if(SM==='day' && !SDAY) SDAY = DAYS.includes(td)?td:'Пн';
+    T.innerHTML = (SM==='day'?`<div class="chips daypick">${DAYS.map(d=>`<button class="chip ${d===SDAY?'on':''}" data-d="${d}">${d}${d===td?' · сегодня':''}</button>`).join('')}</div>`:'')+
+      `<div class="zoom"><button class="ibtn mini" data-z="-" title="Уменьшить">−</button><input type="range" id="zr" min="0.8" max="4" step="0.1" value="${SZ}" aria-label="Масштаб"><button class="ibtn mini" data-z="+" title="Увеличить">+</button><small>Масштаб · Ctrl + колесо мыши · тяните за нижний край</small></div>`;
+    const days = SM==='day'?[SDAY]:DAYS;
+    const sl=D.schedule.map((s,i)=>({s,i})).filter(o=>days.includes(o.s.day));
+    const times=(sl.length?sl:D.schedule.map(s=>({s}))).flatMap(o=>[toMin(o.s.start),toMin(o.s.end)]);
+    const t0=Math.floor(Math.min(...times)/60)*60, t1=Math.ceil(Math.max(...times)/60)*60, PX=SM==='day'?SZ*1.4:SZ, H=(t1-t0)*PX;
+    const colw = SM==='day' ? 0 : Math.round(90+SZ*70);
+    let h=`<div class="week2 ${SM==='day'?'one':''}" style="--cols:${days.length};--colw:${colw}px"><div class="dh"></div>`+days.map(d=>`<div class="dh ${d===td?'today':''}">${d}</div>`).join('');
+    h+=`<div class="hrs" style="height:${H}px">${Array.from({length:(t1-t0)/60+1},(_,k)=>`<div class="hr" style="top:${k*60*PX}px">${(t0/60+k)}:00</div>`).join('')}</div>`;
+    days.forEach(d=>{
+      h+=`<div class="tc" style="height:${H}px">${Array.from({length:(t1-t0)/30},(_,k)=>`<div class="hr ${k%2?'half':''}" style="top:${k*30*PX}px"></div>`).join('')}`+
+        lanes(sl.filter(o=>o.s.day===d)).map(({s,i,lane,of})=>{ const c=club(s.club), dim=!ok(s), grp=slotGroup(s), room=slotRoom(s)||c.room, hh=(toMin(s.end)-toMin(s.start))*PX-3;
+          return `<div class="blk ${s.tent?'tent':''} ${red.has(i)?'clash':''} ${dim?'dim':''} ${hh<46?'tiny':''}" data-id="${esc(s.club)}" title="${esc(c.name)} · ${s.start}-${s.end}${grp?' · '+esc(grp):''}${room?' · '+esc(room):''}" style="top:${(toMin(s.start)-t0)*PX}px;height:${hh}px;left:calc(${lane*100/of}% + 2px);width:calc(${100/of}% - 4px);right:auto;background-color:${c.color}">
+            <b>${esc(c.name)}</b><span class="bt">${s.start}-${s.end}</span>${grp?`<i>${esc(grp)}</i>`:''}${SM==='day'?`${room?`<i>${esc(room)}</i>`:''}${c.teacher?`<i>${esc(c.teacher)}</i>`:''}`:''}</div>`; }).join('')+`</div>`;
+    });
+    V.innerHTML=`<div class="gwrap" id="gwrap">${h}</div></div><div class="ghandle" id="ghandle" title="Потяните, чтобы растянуть"><span></span></div>`;
+    T.querySelectorAll('.daypick .chip').forEach(b=>b.onclick=()=>{ SDAY=b.dataset.d; renderSched(); });
+    const setZ=z=>{ SZ=Math.max(.8,Math.min(4,Math.round(z*10)/10)); saveS(); renderSched(); };
+    T.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>setZ(SZ+(b.dataset.z==='+'?.3:-.3)));
+    $('#zr').oninput=e=>setZ(+e.target.value);
+    $('#gwrap').addEventListener('wheel',e=>{ if(!e.ctrlKey) return; e.preventDefault(); setZ(SZ+(e.deltaY<0?.2:-.2)); },{passive:false});
+    $('#ghandle').onpointerdown=e=>{ e.preventDefault(); const y0=e.clientY, z0=SZ; let raf=0; document.body.style.cursor='ns-resize';
+      const mv=m=>{ const z=Math.max(.8,Math.min(4,Math.round((z0+(m.clientY-y0)/180)*10)/10)); if(z!==SZ && !raf){ raf=requestAnimationFrame(()=>{ raf=0; SZ=z; const sc=scrollY; renderSched(); scrollTo(0,sc); }); } };
+      const up=()=>{ removeEventListener('pointermove',mv); removeEventListener('pointerup',up); document.body.style.cursor=''; saveS(); };
+      addEventListener('pointermove',mv); addEventListener('pointerup',up); };
+  } else if(SM==='days'){
+    V.innerHTML = `<div class="daylist">${DAYS.map(d=>{ const arr=D.schedule.filter(s=>s.day===d&&ok(s)).sort((a,b)=>toMin(a.start)-toMin(b.start));
+      return arr.length?`<div class="card dayc"><h5>${d}${d===td?' · сегодня':''}</h5>${arr.map(s=>{const c=club(s.club); return `<div class="drow" data-id="${esc(s.club)}"><span class="tm">${s.start}-${s.end}</span><span class="thumb">${artSVG(c)}</span><span>${esc(c.name)}${s.room?` <small style="color:var(--dim)">· ${esc(s.room)}</small>`:''}${s.tent?' <span class="tbd">· уточн.</span>':''}</span></div>`}).join('')}</div>`:''; }).join('')}</div>`;
+  } else if(SM==='clubs'){
+    const list=D.clubs.filter(c=>!fc || D.schedule.some(s=>s.club===c.id&&ok(s)) || (!clubSlots(c.id).length && (()=>{const [a,b]=range(c.classes);return fc>=a&&fc<=b;})()));
+    V.innerHTML = `<div class="cbox">${list.map(c=>{ const sl=clubSlots(c.id).filter(ok);
+      return `<div class="card cclub" data-id="${esc(c.id)}"><div class="cch"><span class="thumb lg">${artSVG(c)}</span><div><b>${esc(c.name)}</b><small>${esc(c.teacher||'руководитель уточняется')} · ${esc(c.classes)} кл.</small></div></div>${sl.length?slotGroupsHTML(sl):'<p class="tbd" style="margin-top:8px">дни и время уточняются</p>'}</div>`; }).join('')}</div>`;
+  } else if(SM==='teachers'){
+    const by=new Map(); D.schedule.filter(ok).forEach(s=>{ const t=club(s.club).teacher||'Руководитель уточняется'; if(!by.has(t)) by.set(t,[]); by.get(t).push(s); });
+    V.innerHTML = `<div class="cbox">${[...by.keys()].sort().map(t=>{ const arr=by.get(t).sort((a,b)=>DAYS.indexOf(a.day)-DAYS.indexOf(b.day)||toMin(a.start)-toMin(b.start));
+      return `<div class="card cclub"><div class="cch"><span class="tav">${esc(t.split(' ').map(w=>w[0]).slice(0,2).join(''))}</span><div><b>${esc(t)}</b><small>${arr.length} ${plural(arr.length,'занятие','занятия','занятий')} в неделю</small></div></div>
+        ${DAYS.filter(d=>arr.some(s=>s.day===d)).map(d=>`<div class="tday"><span>${d}</span><div>${arr.filter(s=>s.day===d).map(s=>`<div class="drow" data-id="${esc(s.club)}"><span class="tm">${s.start}-${s.end}</span><span>${esc(club(s.club).name)}${s.room?` <small style="color:var(--dim)">· ${esc(s.room)}</small>`:''}</span></div>`).join('')}</div></div>`).join('')}</div>`; }).join('')}</div>`;
+  }
+  V.querySelectorAll('.blk, .drow, .cclub[data-id] .cch').forEach(e=>e.onclick=()=>openClub(e.dataset.id||e.closest('[data-id]').dataset.id));
 }
-document.querySelectorAll('#schedMode button').forEach(b=>b.onclick=()=>{ document.querySelectorAll('#schedMode button').forEach(x=>x.classList.toggle('on',x===b)); document.body.classList.toggle('sgrid',b.dataset.m==='grid'); try{localStorage.setItem('irtysh_sched_mode',b.dataset.m)}catch(e){} });
-try{ if(localStorage.getItem('irtysh_sched_mode')==='grid'){ document.body.classList.add('sgrid'); document.querySelectorAll('#schedMode button').forEach(x=>x.classList.toggle('on',x.dataset.m==='grid')); } }catch(e){}
+document.querySelectorAll('#schedMode button').forEach(b=>b.onclick=()=>{ SM=b.dataset.m; saveS(); vt(()=>renderSched()); });
 (function(){ const s=$('#fClass'); for(let k=1;k<=11;k++) s.insertAdjacentHTML('beforeend',`<option value="${k}">${k} класс</option>`); s.onchange=renderSched; })();
 
 /* ---------- найди свой кружок ---------- */
