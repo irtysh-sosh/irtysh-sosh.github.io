@@ -1149,7 +1149,7 @@ try{ SM=localStorage.getItem('irtysh_sched_mode2')||'days'; if(SM==='grid') SM='
 const saveS=()=>{ try{ localStorage.setItem('irtysh_sched_mode2',SM); localStorage.setItem('irtysh_sched_zoom',SZ); }catch(e){} };
 function schedData(){ const fc=+$('#fClass').value||0; return {fc, ok:s=>{ if(!fc) return true; const [a,b]=slotRange(s); return fc>=a&&fc<=b; }}; }
 function renderSched(){
-  const cl=findClashes(), red=new Set(); cl.filter(c=>c.lvl==='r').forEach(c=>{red.add(c.i);red.add(c.j)});
+  const cl=USER?findClashes():[], red=new Set(); cl.filter(c=>c.lvl==='r').forEach(c=>{red.add(c.i);red.add(c.j)});
   const nr=cl.filter(c=>c.lvl==='r').length;
   { const w=$('#clashStatus'); w.hidden=!cl.length; w.classList.toggle('red',nr>0); w.querySelector('i').textContent=nr||''; w.title=nr?`Накладок: ${nr} - нажмите, чтобы посмотреть`:'Совпадения по времени - нажмите, чтобы посмотреть'; if(!cl.length) $('#clashPanel').hidden=true; }
   const cy=cl.filter(c=>c.lvl==='y'); $('#clashes').innerHTML = cl.filter(c=>c.lvl==='r').map(c=>`<div class="r">⛔ ${esc(c.text)}</div>`).join('') + (cy.length?`<details class="ydet"><summary>⚠ Совпадения по времени для одних классов: ${cy.length} (ребёнок не сможет ходить на оба)</summary>${cy.map(c=>`<div class="y">${esc(c.text)}</div>`).join('')}</details>`:'');
