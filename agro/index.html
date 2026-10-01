@@ -177,6 +177,11 @@ canvas{width:100%; display:block; border-radius:14px; background:#0b1a10}
 .vid{position:relative; padding-top:56.25%; background:#000} .vid iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
 .mfoot{display:flex; gap:10px; align-items:center; justify-content:space-between; padding:14px 18px; flex-wrap:wrap}
 .x{position:absolute; top:10px; right:10px; z-index:2; border:none; background:rgba(255,255,255,.9); width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:16px}
+.exam{border:2px solid #f59e0b; background:color-mix(in srgb,#f59e0b 10%,transparent); border-radius:14px; padding:12px 14px; margin-bottom:14px}
+.exam p{font-size:14px; color:var(--dim); margin-top:4px}
+.exf{display:grid; grid-template-columns:2fr 1fr; gap:10px; margin-top:10px} @media(max-width:520px){ .exf{grid-template-columns:1fr} }
+.exf label{font-weight:700; font-size:13px} .exf input{display:block; width:100%; margin-top:4px; font:600 15px Manrope,sans-serif; padding:10px 12px; border-radius:12px; border:1px solid var(--line); background:var(--card); color:var(--text)}
+.exst{text-align:center; font-weight:800; margin-bottom:8px}
 #toast{position:fixed; left:50%; bottom:22px; transform:translate(-50%,30px); opacity:0; background:var(--text); color:var(--bg); padding:10px 18px; border-radius:12px; font-weight:700; transition:.3s; z-index:200}
 #toast.on{opacity:1; transform:translate(-50%,0)}
 footer{color:var(--dim); font-size:13px; text-align:center; padding:26px 0 40px}
@@ -723,21 +728,48 @@ let ans={};
 const shuf=a=>{ for(let i=a.length-1;i>0;i--){ const j=Math.random()*(i+1)|0; [a[i],a[j]]=[a[j],a[i]]; } return a; };
 function testHTML(m){
   const last=P['t:'+m.id];
-  return `<div class="card">${last?`<p style="margin-bottom:12px;color:var(--dim)">Прошлый результат: <b style="color:${last.pass?'var(--ok)':'var(--warn)'}">${last.score} из ${m.test.length}</b></p>`:''}
+  return `<div class="card"><div id="examBox"></div>${last?`<p style="margin-bottom:12px;color:var(--dim)">Прошлый результат: <b style="color:${last.pass?'var(--ok)':'var(--warn)'}">${last.score} из ${m.test.length}</b></p>`:''}
     ${m.test.map((t,qi)=>`<div class="q"><b>${qi+1}. ${esc(t.q)}</b>${shuf(t.a.map((a,ai)=>[a,ai])).map(([a,ai])=>`<button class="opt" data-q="${qi}" data-a="${ai}">${esc(a)}</button>`).join('')}</div>`).join('')}
     <button class="ibtn pri" id="checkBtn">Проверить</button><div id="tRes"></div></div>`;
 }
+/* ---------- зачёт: учитель открывает его на сайте школы, результат уходит в таблицу ---------- */
+let examCache=null, examT=0, examMode=null;
+async function getExam(){ if(Date.now()-examT<30000) return examCache; try{ const j=await (await fetch(API,{method:'POST',body:JSON.stringify({op:'examq'})})).json(); examCache=j.ok?j.exam:null; examT=Date.now(); }catch(e){ examCache=null; } return examCache; }
+const lsGet=(k,d)=>{ try{ return JSON.parse(localStorage.getItem(k)||'null')??d; }catch(e){ return d; } }, lsSet=(k,v)=>{ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} };
+async function flushResults(){
+  const q=lsGet('agro_pending',[]); if(!q.length) return;
+  const left=[]; for(const r of q){ try{ const j=await (await fetch(API,{method:'POST',body:JSON.stringify({op:'result',...r})})).json();
+      if(j.ok){ lsSet('agro_sent_'+r.mod+'_'+r.until,1); const st=document.getElementById('exSt'); if(st && examMode && examMode.mod===r.mod) st.innerHTML='✅ Результат отправлен учителю'; }
+      else if(j.retry) left.push(r); else { const st=document.getElementById('exSt'); if(st) st.textContent='⚠ '+(j.error||'Не отправлено'); } }
+    catch(e){ left.push(r); } }
+  lsSet('agro_pending',left);
+  if(left.length) setTimeout(flushResults, 15000+Math.random()*10000);
+}
+async function checkExam(m){
+  examMode=null; const box=document.getElementById('examBox'); if(!box) return;
+  const ex=await getExam(); if(!ex || !ex.mods.includes(m.id) || !document.getElementById('examBox')) return;
+  const sent=lsGet('agro_sent_'+m.id+'_'+ex.until,0), me=lsGet('agro_student',{name:'',cls:''});
+  examMode={mod:m.id, until:ex.until, sent:!!sent};
+  box.innerHTML=`<div class="exam"><b>🎓 Сейчас идёт зачёт по этому модулю</b>${sent?'<p>Твой результат уже отправлен учителю ✓ Можно пройти тест ещё раз для тренировки - в зачёт идёт первая попытка.</p>':`<p>Подпишись, чтобы учитель увидел результат. В зачёт идёт первая попытка.</p>
+    <div class="exf"><label>Фамилия и имя<input id="exName" value="${esc(me.name)}" placeholder="Иванов Пётр" maxlength="60"></label><label>Класс<input id="exCls" value="${esc(me.cls)}" placeholder="9а" maxlength="10" list="exClsL"></label><datalist id="exClsL"><option value="8"><option value="9а"><option value="9б"></datalist></div>`}</div>`;
+}
 function bindTest(m){
-  ans={};
+  ans={}; checkExam(m);
   document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{ if(b.closest('.done-test')) return; document.querySelectorAll(`.opt[data-q="${b.dataset.q}"]`).forEach(x=>x.classList.remove('sel')); b.classList.add('sel'); ans[b.dataset.q]=+b.dataset.a; });
   const cb=document.getElementById('checkBtn'); if(!cb) return;
   cb.onclick=()=>{
     if(Object.keys(ans).length<m.test.length){ toast('Ответьте на все вопросы'); return; }
+    let who=null;
+    if(examMode && examMode.mod===m.id && !examMode.sent){ const n=($('#exName')?.value||'').trim().replace(/\s+/g,' '), c=($('#exCls')?.value||'').trim();
+      if(n.split(' ').length<2 || !c){ toast('Для зачёта впиши фамилию, имя и класс'); $('#exName')?.focus(); return; } who={name:n, cls:c}; lsSet('agro_student',who); }
     let sc=0; m.test.forEach((t,qi)=>{ document.querySelectorAll(`.opt[data-q="${qi}"]`).forEach(b=>{ const a=+b.dataset.a; if(a===t.r) b.classList.add('right'); else if(a===ans[qi]) b.classList.add('wrong'); }); if(ans[qi]===t.r) sc++; });
     const pass=sc/m.test.length>=0.7; P['t:'+m.id]={score:sc, pass}; saveP();
     $('#tabBody .card').classList.add('done-test');
     $('#tRes').innerHTML=`<div class="result"><div class="sc" style="color:${pass?'var(--ok)':'var(--warn)'}">${sc} / ${m.test.length}</div><p>${pass?'Отлично, тест сдан! 🎉':'Почти! Пересмотрите уроки и попробуйте ещё раз.'}</p><button class="ibtn" onclick="renderMod()">Пройти заново</button></div>`;
     cb.remove(); $('#tRes').scrollIntoView({behavior:'smooth',block:'center'});
+    if(who){ examMode.sent=true; $('#tRes').insertAdjacentHTML('afterbegin','<p class="exst" id="exSt">📨 Отправляю результат учителю…</p>');
+      const q=lsGet('agro_pending',[]); q.push({mod:m.id, until:examMode.until, name:who.name, cls:who.cls, score:sc, total:m.test.length}); lsSet('agro_pending',q);
+      setTimeout(flushResults, Math.random()*2500); }
   };
 }
 
@@ -1297,7 +1329,7 @@ function setTheme(t){ document.documentElement.dataset.theme=t; try{localStorage
 let th='light'; try{ th=localStorage.getItem('irtysh_theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); }catch(e){} setTheme(th);
 $('#themeBtn').onclick=()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');
 
-renderHome(); renderXP();
+renderHome(); renderXP(); setTimeout(flushResults, 3000);
 (function hit(page){ try{ const k='irtysh_hit_'+page; if(sessionStorage.getItem(k)!==null) return; const d=new Date().toDateString(), fresh=!localStorage.getItem('irtysh_new_'+page), today=localStorage.getItem('irtysh_day_'+page)!==d;
   fetch(API,{method:'POST', body:JSON.stringify({op:'hit', page, fresh, today})}).then(r=>r.json()).then(j=>{ if(!j.ok) return; localStorage.setItem('irtysh_new_'+page,'1'); localStorage.setItem('irtysh_day_'+page,d); sessionStorage.setItem(k,String(j.total||'')); }).catch(()=>{}); }catch(e){} })('agro');
 const h=location.hash.slice(1);
