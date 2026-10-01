@@ -602,8 +602,6 @@ body.sgrid .daylist{display:none !important}
         <div id="nowList"></div>
       </div>
     </div>
-    <div class="card tl"><div style="display:flex;justify-content:space-between;align-items:center"><b>Лента дня</b><small style="color:var(--dim)" id="tlDay"></small></div><div class="row" id="tlRow"></div></div>
-    <div class="grid g4" style="margin-top:14px" id="kpis"></div>
     <a class="agrobn" href="agro/" id="agroBn">
       <span class="abg"></span>
       <div class="atx"><small>ОТДЕЛЬНЫЙ РАЗДЕЛ · 8-9 КЛАССЫ</small><h3>Агрокласс</h3>
@@ -745,7 +743,7 @@ const ICONS = {
   orbit:'<ellipse cx="12" cy="12" rx="10" ry="4.5"/><circle cx="12" cy="12" r="3"/>',
   edit:'<path d="M4 20h4L20 8l-4-4L4 16z"/>',
   moon:'<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>',
-  leaf:'<path d="M5 19c0-8 5-14 15-15-1 10-7 15-15 15z"/><path d="M5 19l8-8"/>',
+  run:'<circle cx="14" cy="4" r="2"/><path d="M6 21l3-6 3 2 1-5 4 3 3-1M8 11l4-3 3 2"/>', leaf:'<path d="M5 19c0-8 5-14 15-15-1 10-7 15-15 15z"/><path d="M5 19l8-8"/>',
   cal_add:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18M12 13v5M9.5 15.5h5"/>'
 };
 const ic = (n, s=20) => `<svg class="i" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||ICONS.target}</svg>`;
@@ -892,7 +890,8 @@ const CK = 'irtysh_school_cache_v2';
 let D = null; try{ D = JSON.parse(ls.get(CK)||'null'); }catch(e){}
 const fixUrl=u=>String(u||'').replace(/^https?:\/\/irtysh-sosh\.github\.io\/(?=.)/i,'').replace(/^https?:\/\/[\w-]+\.github\.io\/vzlet\/school\/?/i,'./').replace(/^https?:\/\/[\w-]+\.github\.io\/vzlet\/?/i,'vzlet/').replace(/^agro\.html$/i,'agro/');
 function normalize(){ if(!D||typeof D!=='object') D=structuredClone(DEFAULT); Object.keys(DEFAULT).forEach(k=>{ if(!Array.isArray(D[k])) D[k]=structuredClone(DEFAULT[k]); });
-  D.projects.forEach(p=>p.link=fixUrl(p.link)); D.quick.forEach(q=>q.url=fixUrl(q.url)); D.links.forEach(l=>l.url=fixUrl(l.url)); D.clubs.forEach(c=>c.link=fixUrl(c.link)); }
+  D.projects.forEach(p=>p.link=fixUrl(p.link)); D.quick.forEach(q=>q.url=fixUrl(q.url)); D.links.forEach(l=>l.url=fixUrl(l.url)); D.clubs.forEach(c=>c.link=fixUrl(c.link));
+  [...D.quick.map(q=>[q,'url']), ...D.projects.map(p=>[p,'link']), ...D.links.map(l=>[l,'url'])].forEach(([o,k])=>{ if(!o[k] && /Спектр/i.test(o.name||'')) o[k]='spectr/'; }); }
 normalize();
 const save = () => ls.set(CK, JSON.stringify(D));
 let TOKEN = null;
@@ -984,7 +983,9 @@ const TILES=[
   {v:'ach', e:'trophy', t:'Достижения', g:'#f59e0b,#ef4444'},
   {v:'proj', e:'users', t:'Проекты', g:'#8b5cf6,#ec4899'},
   {v:'agro', e:'leaf', t:'Агрокласс', g:'#15803d,#84cc16', href:'agro/'},
-  {v:'vzlet', e:'drone', t:'Клуб БПЛА "Взлёт"', g:'#0e7490,#22d3ee', href:'vzlet/'}
+  {v:'vzlet', e:'drone', t:'Клуб БПЛА "Взлёт"', g:'#0e7490,#22d3ee', href:'vzlet/'},
+  {v:'spectr', e:'spectrum', t:'Ресурсный центр "Спектр"', g:'#7c3aed,#ec4899', href:'spectr/'},
+  {v:'sport', e:'run', t:'Спорткомплекс', g:'#ea580c,#facc15', href:'sport/'}
 ];
 function tilePreview(v){
   if(v==='clubs') return D.clubs.map(c=>`<div class="drow"><span class="thumb">${artSVG(c)}</span><b style="flex:1">${esc(c.name)}</b><small style="color:var(--dim)">${esc(c.classes)} кл.</small></div>`).join('');
@@ -996,11 +997,13 @@ function tilePreview(v){
     return p.link?`<a class="drow lnk" href="${esc(p.link)}" ${ext(p.link)?'target="_blank" rel="noopener"':'data-dive'}>${inner}</a>`:`<div class="drow">${inner}</div>`; }).join('');
   if(v==='agro') return '<p>Беспилотные авиасистемы в АПК для 8-9 классов: 10 модулей с видеоуроками и тестами, лаборатория Python и промпт-инжиниринг.</p>';
   if(v==='vzlet'){ const sl=clubSlots('vzlet'); return `<p>FPV-пилотирование: симулятор, полёты, гонки дронов. Рейтинг пилотов, трассы и задачи клуба.</p>${sl.map(s=>`<div class="drow"><span class="tm">${s.day}</span>${s.start}-${s.end}</div>`).join('')}`; }
+  if(v==='spectr') return '<p>Творчество и техника для детей и взрослых: ансамбли, ложкари, солисты, рисование и лепка, клуб БПЛА "Взлёт". События, площадки и расписание недели.</p>';
+  if(v==='sport') return '<p>Секции: лёгкая атлетика, футбол, волейбол, хоккей, FPV-тренировки. Расписание недели и события.</p>';
   return '';
 }
 function tileSub(v){
   const n={clubs:D.clubs.length+' '+plural(D.clubs.length,'кружок','кружка','кружков'), sched:todaySlots().length+' '+plural(todaySlots().length,'занятие','занятия','занятий')+' сегодня',
-    events:upcoming().length+' впереди', find:'подбор за 10 секунд', ach:D.achievements.length+' '+plural(D.achievements.length,'победа','победы','побед'), agro:'10 модулей · 8-9 классы', vzlet:'рейтинг и трассы', proj:D.projects.length+' '+plural(D.projects.length,'проект','проекта','проектов')};
+    events:upcoming().length+' впереди', find:'подбор за 10 секунд', ach:D.achievements.length+' '+plural(D.achievements.length,'победа','победы','побед'), agro:'10 модулей · 8-9 классы', vzlet:'рейтинг и трассы', spectr:'ансамбли, творчество, техника', sport:'секции и расписание', proj:D.projects.length+' '+plural(D.projects.length,'проект','проекта','проектов')};
   return n[v]||'';
 }
 let openTile=null;
@@ -1028,7 +1031,7 @@ function renderHome(){
   renderNow();
   const ev=upcoming();
   const kp=[[D.clubs.length,'кружков и секций'],[D.schedule.length,'занятий в неделю'],[ev.length,'ближайших событий'],[D.achievements.length,'достижений']];
-  $('#kpis').innerHTML = kp.map(([v,l])=>`<div class="card kpi"><div class="n" data-to="${v}">0</div><div class="l">${l}</div></div>`).join('');
+  if($('#kpis')) $('#kpis').innerHTML = kp.map(([v,l])=>`<div class="card kpi"><div class="n" data-to="${v}">0</div><div class="l">${l}</div></div>`).join('');
   document.querySelectorAll('.kpi .n').forEach(el=>countUp(el,+el.dataset.to));
   $('#homeEvents').innerHTML = evHTML(ev.slice(0,3)) || '<p style="color:var(--dim)">Пока нет запланированных событий</p>';
   $('#homeClubs').innerHTML = D.clubs.map(c=>clubHTML(c,true)).join('');
@@ -1037,12 +1040,12 @@ function renderHome(){
 function countUp(el,to){ let v=0; const st=performance.now(); const f=t=>{ const p=Math.min(1,(t-st)/900); el.textContent=Math.round(to*(1-Math.pow(1-p,3))); if(p<1) requestAnimationFrame(f); }; requestAnimationFrame(f); }
 function renderTimeline(){
   const n=new Date(), m=n.getHours()*60+n.getMinutes(), ts=todaySlots(), A=8*60, B=20*60, P=v=>((v-A)/(B-A)*100).toFixed(2)+'%';
-  $('#tlDay').textContent = n.toLocaleDateString('ru-RU',{weekday:'long'});
+  if($('#tlRow')){ $('#tlDay').textContent = n.toLocaleDateString('ru-RU',{weekday:'long'});
   let h=''; for(let t=A;t<=B;t+=120) h+=`<span class="tk" style="left:${P(t)}">${t/60}:00</span>`;
   h+=ts.map(s=>{ const c=club(s.club), a=toMin(s.start), b=toMin(s.end); return `<div class="sl ${b<=m?'past':''}" data-id="${esc(s.club)}" title="${esc(c.name)} ${s.start}-${s.end}" style="left:${P(a)};width:calc(${P(b)} - ${P(a)});background:${c.color}">${esc(c.name)}</div>`; }).join('');
   if(m>=A && m<=B) h+=`<div class="nowl" style="left:${P(m)}"></div>`;
   if(!ts.length) h+=`<div style="position:absolute;inset:0;display:grid;place-items:center;color:var(--dim);font-size:13px">сегодня занятий нет</div>`;
-  $('#tlRow').innerHTML=h; document.querySelectorAll('#tlRow .sl').forEach(e=>e.onclick=()=>openClub(e.dataset.id));
+  $('#tlRow').innerHTML=h; document.querySelectorAll('#tlRow .sl').forEach(e=>e.onclick=()=>openClub(e.dataset.id)); }
   const ev=upcoming().find(e=>e._d && e._d>=today0());
   if(ev){ const t=new Date(ev._d); t.setHours(9,0,0,0); const d=Math.max(0,t-n), dd=Math.floor(d/864e5), hh=Math.floor(d%864e5/36e5), mm=Math.floor(d%36e5/6e4);
     $('#evCount').innerHTML = `до события "${esc(ev.title.split(':')[0])}"&nbsp; <b>${dd}д ${hh}ч ${String(mm).padStart(2,'0')}м</b>`; }
@@ -1335,9 +1338,18 @@ let USER=null;
 function canEdit(clubId){ return USER && (USER.role==='admin' || (USER.clubs||[]).includes(clubId)); }
 function canItem(it){ return !!USER && (USER.role==='admin' || (!!it && !!it.club && (USER.clubs||[]).includes(it.club))); }
 function clubTag(id){ const c=id&&D.clubs.find(x=>x.id===id); return c?` <span class="ctag" style="--c:${esc(c.color)}">${esc(c.name)}</span>`:''; }
+/* "Наумов А.А." -> "Александр Александрович Н." (полное имя берём из руководителей кружков) */
+function niceName(n){
+  n=String(n||'').trim(); const parts=n.split(/\s+/);
+  if(parts.length>=3 && !/\./.test(n)) return `${parts[1]} ${parts[2]} ${parts[0][0]}.`;
+  const m=n.match(/^([А-ЯЁA-Z][а-яёa-z-]+)\s+([А-ЯЁA-Z])\.\s*([А-ЯЁA-Z])\.?$/);
+  if(m){ const full=[...D.clubs.map(c=>c.teacher), ...(typeof HUBT!=='undefined'?HUBT:[])].map(t=>String(t||'').trim().split(/\s+/)).find(t=>t.length>=3 && t[0]===m[1] && t[1][0]===m[2] && t[2][0]===m[3]);
+    if(full) return `${full[1]} ${full[2]} ${m[1][0]}.`; }
+  return n;
+}
 function applyUser(){
   document.body.classList.toggle('editing', !!USER); document.body.classList.toggle('admin', !!USER && USER.role==='admin');
-  $('#userName').textContent = USER ? USER.name : ''; $('#editBtn').style.display = (USER || !trustedDev())?'none':'';
+  $('#userName').textContent = USER ? niceName(USER.name) : ''; $('#editBtn').style.display = (USER || !trustedDev())?'none':'';
   if(!USER) TOKEN=null; saveSess();
   renderAll();
 }
@@ -1347,26 +1359,54 @@ function openLogin(){
     <div class="mbar"><button class="ibtn" onclick="closeM()">Отмена</button><button class="ibtn pri" id="pinGo">Войти</button></div>`;
   openM(); const inp=$('#pin'); setTimeout(()=>inp.focus(),50);
   const go=async()=>{ const pin=inp.value.trim(); if(!pin) return; const b=$('#pinGo'); b.disabled=true; b.textContent='Проверяю…';
-    try{ const j=await api({op:'login',pin}); TOKEN=j.token; USER=j.user; try{ localStorage.setItem('irtysh_editor_dev','1'); }catch(_){} closeM(); applyUser(); toast(`Здравствуйте, ${USER.name}!`); }
+    try{ const j=await api({op:'login',pin}); TOKEN=j.token; USER=j.user; try{ localStorage.setItem('irtysh_editor_dev','1'); }catch(_){} closeM(); applyUser(); toast(`Здравствуйте, ${niceName(USER.name)}!`); }
     catch(e){ inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake'); inp.value=''; toast(e.message); }
     finally{ if(document.body.contains(b)){ b.disabled=false; b.textContent='Войти'; } } };
   $('#pinGo').onclick=go; inp.onkeydown=e=>{ if(e.key==='Enter') go(); };
 }
 function openUserMenu(){
   const mine = USER.role==='admin' ? 'все кружки и разделы' : D.clubs.filter(c=>USER.clubs.includes(c.id)).map(c=>c.name).join(', ') || 'кружки не назначены';
-  $('#mbody').innerHTML = `<h3>${esc(USER.name)}</h3><p style="color:var(--dim)">${USER.role==='admin'?'Администратор':'Руководитель'} · может менять: ${esc(mine)}</p>
+  $('#mbody').innerHTML = `<h3>${esc(niceName(USER.name))}</h3><p style="color:var(--dim)">${USER.role==='admin'?'Администратор':'Руководитель'} · может менять: ${esc(mine)}</p>
     <div class="qact">${D.clubs.filter(c=>canEdit(c.id)&&USER.role!=='admin').map(c=>`<button class="ibtn" onclick="closeM();openClubForm('${esc(c.id)}')">${ic('edit',16)} ${esc(c.name)}: описание и расписание</button>`).join('')}
       <button class="ibtn" onclick="closeM();openForm('events')">+ Мероприятие</button><button class="ibtn" onclick="closeM();openForm('achievements')">+ Достижение</button><button class="ibtn" onclick="closeM();openForm('news')">+ Новость</button></div>
-    <div class="mbar"><button class="ibtn" onclick="openStats()">📊 Посещения</button><button class="ibtn admin-only" onclick="openEditors()">${ic('users',16)} Редакторы и PIN</button><button class="ibtn" id="logout">Выйти</button><button class="ibtn" id="logoutHide" title="Если это чужой или общий компьютер">Выйти и скрыть вход здесь</button></div>`;
+    <div class="mbar"><button class="ibtn" onclick="openStats()">📊 Посещения</button>${canEdit('agro')?'<button class="ibtn" onclick="openExam()">📝 Зачёт Агрокласса</button>':''}<button class="ibtn admin-only" onclick="openEditors()">${ic('users',16)} Редакторы и PIN</button><button class="ibtn" id="logout">Выйти</button><button class="ibtn" id="logoutHide" title="Если это чужой или общий компьютер">Выйти и скрыть вход здесь</button></div>`;
   openM(); $('#logout').onclick=()=>{ USER=null; TOKEN=null; closeM(); applyUser(); toast('Вы вышли'); };
   $('#logoutHide').onclick=()=>{ try{ localStorage.removeItem('irtysh_editor_dev'); }catch(_){} USER=null; TOKEN=null; closeM(); applyUser(); toast('Вы вышли, кнопка входа на этом устройстве скрыта'); };
+}
+/* ---------- зачёт по тестам Агрокласса ---------- */
+const AGRO_MODS=[['m1','1. Дроны в сельском хозяйстве'],['m2','2. Сборка и коммутация'],['m3','3. Пульт и первый полёт'],['m4','4. Стабилизация и PID'],['m5','5. Датчики и навигация'],['m6','6. DroneCam'],['m7','7. Python'],['m8','8. Техническое зрение и ИИ'],['m9','9. VTOL'],['m10','10. Итоговый проект']];
+const modName=id=>(AGRO_MODS.find(m=>m[0]===id)||[id,id])[1];
+let examSel=new Set(), examMin=45, examFilter='';
+async function openExam(){
+  $('#mbody').innerHTML='<h3>📝 Зачёт Агрокласса</h3><p style="color:var(--dim)">Загружаю…</p>'; openM();
+  let j; try{ j=await api({op:'results'}); }catch(e){ $('#mbody').innerHTML=`<h3>📝 Зачёт Агрокласса</h3><p>${esc(e.message)}</p>`; return; }
+  const ex=j.exam, res=j.results||[], hm=t=>new Date(t).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+  if(ex) examSel=new Set(ex.mods);
+  const rows=res.filter(r=>!examFilter||r.mod===examFilter);
+  $('#mbody').innerHTML=`<h3>📝 Зачёт Агрокласса</h3>
+    <p style="color:var(--dim);font-size:13px">Пока зачёт закрыт, тесты работают как тренировка. Откройте зачёт на занятии - ученики увидят в тесте поля "Фамилия Имя" и "Класс", а результаты придут сюда. Ученикам: Агрокласс → модуль → вкладка "Тест".</p>
+    <div class="card" style="margin:10px 0;padding:12px;${ex?'border-color:#16a34a':''}">${ex?`<b style="color:#16a34a">🟢 Идёт зачёт до ${hm(ex.until)}</b><br><small>${ex.mods.map(modName).map(esc).join(' · ')}</small><div class="mbar" style="margin-top:8px"><button class="ibtn" id="exClose">Закрыть зачёт</button></div>`:'<b>⚪ Зачёт закрыт</b>'}</div>
+    <b style="font-size:14px">Какие модули</b><div class="chips" id="exMods" style="margin:6px 0 10px">${AGRO_MODS.map(([id,t])=>`<button type="button" class="chip ${examSel.has(id)?'on':''}" data-m="${id}">${esc(t)}</button>`).join('')}</div>
+    <b style="font-size:14px">На сколько минут</b><div class="chips" id="exMin" style="margin:6px 0 10px">${[20,45,90].map(m=>`<button type="button" class="chip ${examMin===m?'on':''}" data-v="${m}">${m} мин</button>`).join('')}</div>
+    <div class="mbar"><button class="ibtn pri" id="exOpen">${ex?'Обновить зачёт':'Открыть зачёт'}</button></div>
+    <h3 style="font-size:16px;margin-top:16px">Результаты <small style="color:var(--dim);font-weight:600">${res.length}</small></h3>
+    <div class="chips" style="margin:6px 0"><button type="button" class="chip ${examFilter?'':'on'}" data-f="">все</button>${[...new Set(res.map(r=>r.mod))].map(m=>`<button type="button" class="chip ${examFilter===m?'on':''}" data-f="${m}">${esc(modName(m).split('.')[0])} модуль</button>`).join('')}</div>
+    ${rows.length?`<div style="max-height:320px;overflow:auto"><table class="sttab"><tr><th>Ученик</th><th>Класс</th><th>Модуль</th><th>Баллы</th><th>Когда</th></tr>${rows.map(r=>{ const pc=Math.round(r.score/r.total*100); return `<tr><td>${esc(r.name)}</td><td>${esc(r.cls)}</td><td>${esc(modName(r.mod).split('.')[0])}</td><td><b style="color:${pc>=70?'#16a34a':pc>=50?'#d97706':'#dc2626'}">${r.score}/${r.total}</b></td><td style="color:var(--dim)">${esc(r.when)}</td></tr>`; }).join('')}</table></div>
+      <div class="mbar"><button class="ibtn" id="exCopy">Скопировать для Excel</button><button class="ibtn" onclick="openExam()">↻ Обновить</button></div>`:'<p style="color:var(--dim)">Пока результатов нет.</p>'}`;
+  document.querySelectorAll('#exMods .chip').forEach(b=>b.onclick=()=>{ const m=b.dataset.m; examSel.has(m)?examSel.delete(m):examSel.add(m); b.classList.toggle('on'); });
+  document.querySelectorAll('#exMin .chip').forEach(b=>b.onclick=()=>{ examMin=+b.dataset.v; document.querySelectorAll('#exMin .chip').forEach(x=>x.classList.toggle('on',x===b)); });
+  document.querySelectorAll('[data-f]').forEach(b=>{ if(b.closest('#mbody')) b.onclick=()=>{ examFilter=b.dataset.f; openExam(); }; });
+  $('#exOpen').onclick=()=>busy('#exOpen', async()=>{ await api({op:'exam', mods:[...examSel], minutes:examMin}); toast('Зачёт открыт ✓'); openExam(); });
+  if($('#exClose')) $('#exClose').onclick=()=>busy('#exClose', async()=>{ await api({op:'exam', close:true}); toast('Зачёт закрыт'); openExam(); });
+  if($('#exCopy')) $('#exCopy').onclick=()=>{ const t=['Ученик\tКласс\tМодуль\tБаллы\tИз\tКогда',...rows.map(r=>[r.name,r.cls,modName(r.mod),r.score,r.total,r.when].join('\t'))].join('\n');
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Скопировано - вставьте в Excel или Google-таблицу')).catch(()=>toast('Не удалось скопировать')); };
 }
 async function openEditors(){
   let list; try{ list=(await api({op:'editors'})).editors; }catch(e){ toast(e.message); return; }
   const row=e=>`<div class="edrow"><input data-f="name" value="${esc(e.name)}" placeholder="Имя"><input data-f="pin" value="${esc(e.pin)}" placeholder="PIN" inputmode="numeric">
     <select data-f="role"><option value="club" ${e.role!=='admin'?'selected':''}>руководитель</option><option value="admin" ${e.role==='admin'?'selected':''}>администратор</option></select>
-    <div class="chips" data-f="clubs">${D.clubs.map(c=>`<button type="button" class="chip ${(e.clubs||[]).includes(c.id)?'on':''}" data-c="${esc(c.id)}">${esc(c.name.split(':')[0])}</button>`).join('')}</div><button class="del" title="Удалить">✕</button></div>`;
-  $('#mbody').innerHTML = `<h3>Редакторы и PIN-коды</h3><p style="color:var(--dim)">Имя · PIN (4-8 цифр) · роль · какие кружки может менять. PIN хранятся только в Google-таблице.</p><div id="edList" style="margin-top:12px">${list.map(row).join('')}</div>
+    <div class="chips" data-f="clubs">${D.clubs.map(c=>`<button type="button" class="chip ${(e.clubs||[]).includes(c.id)?'on':''}" data-c="${esc(c.id)}">${esc(c.name.split(':')[0])}</button>`).join('')}${[['hub:spectr','📍 Спектр (весь раздел)'],['hub:sport','📍 Спорткомплекс (весь раздел)']].map(([id,t])=>`<button type="button" class="chip ${(e.clubs||[]).includes(id)?'on':''}" data-c="${id}">${t}</button>`).join('')}</div><button class="del" title="Удалить">✕</button></div>`;
+  $('#mbody').innerHTML = `<h3>Редакторы и PIN-коды</h3><p style="color:var(--dim)">Имя · PIN (4-8 цифр) · роль · какие кружки и разделы может менять. Кружок "Агрокласс" даёт право открывать зачёт. PIN хранятся только в Google-таблице.</p><div id="edList" style="margin-top:12px">${list.map(row).join('')}</div>
     <button class="ibtn mini" id="edAdd">+ Редактор</button><div class="mbar"><button class="ibtn" onclick="closeM()">Отмена</button><button class="ibtn pri" id="edSave">Сохранить</button></div>`;
   openM();
   const bind=()=>{ document.querySelectorAll('#edList .edrow .del').forEach(b=>b.onclick=()=>b.parentElement.remove()); document.querySelectorAll('#edList .chip').forEach(b=>b.onclick=()=>b.classList.toggle('on')); }; bind();
@@ -1497,14 +1537,67 @@ const QDAY=[
  {q:'Какая профессия появилась благодаря дронам?', o:['Оператор БПЛА','Трубочист','Ямщик'], r:0, e:'Оператор БПЛА - одна из самых востребованных новых профессий: съёмка, агро, доставка, инспекции.'},
  {q:'Как правильно использовать ИИ для домашки?', o:['Попросить решить и списать','Попросить объяснить и проверить своё решение'], r:1, e:'ИИ - отличный репетитор: объяснит, подскажет, проверит. А списанное не прокачает твою голову.'},
  {q:'Что выведет код?', code:'высота = 12\nif высота > 10:\n    print("Высоко")\nelse:\n    print("Низко")', o:['Высоко','Низко','12'], r:0, e:'if проверяет условие: 12 больше 10 - значит, выполняется первая ветка.'},
+ {q:'Как назывался первый искусственный спутник Земли?', o:['Спутник-1','Восток-1','Аполлон'], r:0, e:'Его запустили в СССР 4 октября 1957 года. С этого дня началась космическая эра.'},
+ {q:'Кто первым в истории полетел в космос?', o:['Юрий Гагарин','Нил Армстронг','Валентина Терешкова'], r:0, e:'12 апреля 1961 года на корабле "Восток-1". Полёт длился 108 минут - с тех пор это День космонавтики.'},
+ {q:'Кто стал первой женщиной-космонавтом?', o:['Валентина Терешкова','Светлана Савицкая','Елена Серова'], r:0, e:'Валентина Терешкова полетела в космос в 1963 году на корабле "Восток-6".'},
+ {q:'Кто первым вышел в открытый космос?', o:['Алексей Леонов','Юрий Гагарин','Герман Титов'], r:0, e:'В 1965 году Алексей Леонов провёл за бортом корабля около 12 минут.'},
+ {q:'Какая планета Солнечной системы самая большая?', o:['Юпитер','Сатурн','Нептун'], r:0, e:'Юпитер - газовый гигант: внутри него поместилось бы больше тысячи Земель.'},
+ {q:'Сколько примерно летит свет от Солнца до Земли?', o:['8 минут','8 секунд','8 часов'], r:0, e:'Около 8 минут 20 секунд. Мы видим Солнце таким, каким оно было 8 минут назад.'},
+ {q:'Какую планету называют Красной?', o:['Марс','Венеру','Меркурий'], r:0, e:'Поверхность Марса покрыта пылью с оксидом железа - по сути, ржавчиной.'},
+ {q:'Что такое МКС?', o:['Международная космическая станция','Межпланетный корабль','Морская спутниковая связь'], r:0, e:'Станция летает на высоте около 400 км и облетает Землю примерно за полтора часа.'},
+ {q:'Как называется российская система спутниковой навигации?', o:['ГЛОНАСС','Galileo','Байкал'], r:0, e:'ГЛОНАСС помогает дронам, тракторам и телефонам определять, где они находятся.'},
+ {q:'Зачем агрономам снимки со спутников?', o:['Следить за состоянием полей','Поливать поля','Отпугивать птиц'], r:0, e:'По снимкам видно, где посевы растут хуже, - туда и едет агроном.'},
+ {q:'Что значит FPV?', o:['Вид от первого лица','Быстрый мощный аппарат','План полёта'], r:0, e:'First Person View: пилот смотрит через камеру дрона, будто сидит внутри.'},
+ {q:'Что видит пилот в FPV-очках?', o:['Видео с камеры дрона в реальном времени','Карту местности','Прогноз погоды'], r:0, e:'Задержка видео очень маленькая - поэтому можно пролетать даже узкие ворота.'},
+ {q:'Зачем винты квадрокоптера крутятся в разные стороны?', o:['Чтобы дрон не закручивался вокруг себя','Для красоты','Чтобы было громче'], r:0, e:'Два винта по часовой и два против компенсируют друг друга. Меняя их скорость, дрон поворачивается.'},
+ {q:'Что делает полётный контроллер?', o:['Стабилизирует полёт по датчикам','Охлаждает моторы','Снимает видео'], r:0, e:'Это "мозг" дрона: сотни раз в секунду он читает датчики и подправляет обороты моторов.'},
+ {q:'Какой датчик чувствует наклон и вращение дрона?', o:['Гироскоп','Барометр','Микрофон'], r:0, e:'Гироскоп и акселерометр помогают дрону держаться ровно даже на ветру.'},
+ {q:'Какой датчик помогает дрону держать высоту?', o:['Барометр','Термометр','Компас'], r:0, e:'Барометр измеряет давление воздуха: чем выше, тем оно ниже.'},
+ {q:'Что такое LiPo?', o:['Литий-полимерный аккумулятор','Провод для антенны','Тип пропеллера'], r:0, e:'Мощная, но капризная батарея: её нельзя прокалывать, перезаряжать и бросать на солнце.'},
+ {q:'Что обязательно сделать перед полётом?', o:['Проверить заряд, винты и место полёта','Сразу взлетать','Снять винты'], r:0, e:'Предполётная проверка - правило настоящих пилотов. Она спасает дрон и людей вокруг.'},
+ {q:'Почему дрону тяжело в сильный ветер?', o:['Ветер сносит его, и батарея садится быстрее','Ветер ломает GPS','Дрону страшно'], r:0, e:'Чтобы держаться на месте, моторы работают сильнее - и время полёта уменьшается.'},
+ {q:'Как называются гонки дронов через ворота на скорость?', o:['Дрон-рейсинг','Дрон-шоу','Дрон-керлинг'], r:0, e:'В России проходят соревнования по гонкам дронов, есть даже чемпионаты для школьников.'},
+ {q:'Что такое дрон-шоу?', o:['Сотни дронов с огнями рисуют фигуры в небе','Выставка дронов в магазине','Гонка на время'], r:0, e:'Каждым дроном управляет программа, а не пилот, - все летят по заранее рассчитанным точкам.'},
+ {q:'Что такое "точное земледелие"?', o:['Удобрения и вода - точно туда, где нужно','Посев ровными рядами','Пахота по линейке'], r:0, e:'Датчики, спутники и дроны показывают, какому участку поля чего не хватает. Это экономит деньги и бережёт природу.'},
+ {q:'Какая зерновая культура главная в Омской области?', o:['Пшеница','Рис','Хлопок'], r:0, e:'Омская область - один из крупных производителей яровой пшеницы в Сибири.'},
+ {q:'Что показывает индекс NDVI?', o:['Насколько здоровы растения','Марку трактора','Глубину почвы'], r:0, e:'Здоровые листья сильно отражают ближний инфракрасный свет. Камера это видит, а глаз - нет.'},
+ {q:'Почему опрыскивать поле дроном бывает удобнее, чем трактором?', o:['Он не мнёт посевы и работает точечно','Тракторы запрещены','Дрон никогда не ломается'], r:0, e:'Дрон пролетает над посевами и может обработать только больные участки.'},
+ {q:'Что такое севооборот?', o:['Чередование культур на поле по годам','Разворот трактора','Полив по кругу'], r:0, e:'Если каждый год сеять одно и то же, почва устаёт и копятся вредители. Чередование помогает.'},
+ {q:'Что нужно растению для фотосинтеза?', o:['Свет, вода и углекислый газ','Только вода','Только удобрения'], r:0, e:'Из них растение делает сахар и выделяет кислород, которым мы дышим.'},
+ {q:'Почему листья зелёные?', o:['Хлорофилл отражает зелёный свет','Их красит дождь','Из-за цвета почвы'], r:0, e:'Хлорофилл поглощает красный и синий свет для фотосинтеза, а зелёный отражает.'},
+ {q:'Что видит тепловизор на дроне?', o:['Температуру предметов','Звуки','Запахи'], r:0, e:'Так находят пересохшие участки поля, потерявшихся животных или протечки тепла в домах.'},
+ {q:'Что такое "умная теплица"?', o:['Датчики сами управляют поливом, светом и проветриванием','Теплица с Wi-Fi для людей','Очень большая теплица'], r:0, e:'Программа следит за влажностью и температурой и включает нужное оборудование сама.'},
+ {q:'Что такое машинное обучение?', o:['Компьютер учится на примерах и находит закономерности','Ремонт машин','Обучение водителей'], r:0, e:'Вместо правил "если - то" программе показывают тысячи примеров, и она учится сама.'},
+ {q:'Как нейросеть учится узнавать кошек на фото?', o:['Смотрит тысячи фото с подписями','Ей рассказывают сказки','Она знает это с рождения'], r:0, e:'Чем больше разных примеров, тем точнее результат. Так же учат находить сорняки на полях.'},
+ {q:'Что такое датасет?', o:['Набор данных для обучения ИИ','Тип процессора','Сайт с играми'], r:0, e:'Например, 10 000 фото листьев с подписями "здоров" или "болен".'},
+ {q:'Что такое компьютерное зрение?', o:['ИИ понимает, что изображено на фото или видео','Очки для компьютера','Монитор с камерой'], r:0, e:'Так дрон находит посадочную метку, а камера на поле считает растения.'},
+ {q:'Может ли ИИ найти сорняки на фото поля?', o:['Да, если его этому обучить','Нет, никогда','Только ночью'], r:0, e:'Есть машины, которые находят сорняки камерой и обрабатывают только их.'},
+ {q:'Что делает генеративная нейросеть?', o:['Создаёт новое: тексты, картинки, музыку','Только считает','Только удаляет файлы'], r:0, e:'Она не копирует, а составляет новое по образцам, на которых училась.'},
+ {q:'Что такое дипфейк?', o:['Поддельное видео или голос, сделанные ИИ','Глубокое озеро','Новая игра'], r:0, e:'Дипфейки бывают очень убедительными. Если видео кажется странным - проверь источник.'},
+ {q:'Кто отвечает за решение, принятое по совету ИИ?', o:['Человек, который его принял','Нейросеть','Никто'], r:0, e:'ИИ - инструмент. Думать и отвечать за результат - задача человека.'},
+ {q:'Где ИИ уже помогает людям?', o:['В переводе, медицине, навигации и сельском хозяйстве','Только в играх','Нигде'], r:0, e:'Переводчик в телефоне, построение маршрута, анализ снимков - это всё ИИ.'},
+ {q:'Что такое бит?', o:['Самая маленькая единица информации: 0 или 1','Кусок провода','Тип звука'], r:0, e:'Все фото, музыка и игры в компьютере - это огромные цепочки нулей и единиц.'},
+ {q:'Сколько бит в одном байте?', o:['8','10','2'], r:0, e:'8 бит = 1 байт. Одна буква текста обычно занимает 1-2 байта.'},
+ {q:'Кто создал язык Python?', o:['Гвидо ван Россум','Билл Гейтс','Илон Маск'], r:0, e:'Голландский программист выпустил первую версию Python в 1991 году.'},
+ {q:'В честь чего назвали язык Python?', o:['Комедийного шоу "Монти Пайтон"','Змеи питона','Греческого бога'], r:0, e:'Автор любил британское шоу "Летающий цирк Монти Пайтона". Змея на логотипе появилась позже.'},
+ {q:'Что такое алгоритм?', o:['Последовательность шагов для решения задачи','Стиль музыки','Компьютерный вирус'], r:0, e:'Рецепт пирога - тоже алгоритм. Программа - это алгоритм, понятный компьютеру.'},
+ {q:'Как программисты называют ошибку в программе?', o:['Баг','Флаг','Лаг'], r:0, e:'От английского bug - "жучок". Однажды настоящий мотылёк застрял в реле компьютера.'},
+ {q:'Как работает 3D-принтер?', o:['Печатает предмет слой за слоем','Печатает фото','Сканирует документы'], r:0, e:'Расплавленный пластик ложится тонкими слоями. Так печатают даже детали для дронов.'},
+ {q:'Что такое "интернет вещей"?', o:['Устройства сами обмениваются данными через сеть','Интернет-магазин','Соцсеть для вещей'], r:0, e:'Датчики в теплице, умные лампы, счётчики - всё это интернет вещей.'},
+ {q:'Что показал Александр Попов в 1895 году?', o:['Прибор для приёма радиосигналов','Телефон','Электрическую лампочку'], r:0, e:'Его прибор стал одним из первых радиоприёмников. 7 мая в России - День радио.'},
+ {q:'Можно ли назвать дрон роботом?', o:['Да: у него есть датчики, "мозг" и программа','Нет, у робота должны быть руки','Только если он на колёсах'], r:0, e:'Робот - машина, которая сама выполняет задачи по программе. Дрон с автопилотом - настоящий летающий робот.'},
+ {q:'Что выведет код?', code:'print("Дрон" * 2)', o:['ДронДрон','Дрон 2','Ошибку'], r:0, e:'Строку можно умножить на число - она повторится. Python умеет и так.'},
+ {q:'Что выведет код?', code:'x = 10\nx += 5\nprint(x)', o:['15','105','10'], r:0, e:'x += 5 - короткая запись для x = x + 5.'},
+ {q:'Сколько раз напечатается "Взлёт"?', code:'for i in range(2):\n    print("Взлёт")', o:['2','1','3'], r:0, e:'range(2) - два повтора: i = 0 и i = 1.'}
 ];
 function qdayIndex(){ const n=new Date(), s=new Date(n.getFullYear(),0,0); return Math.floor((n-s)/864e5)%QDAY.length; }
 let qOff=0;
 function qStore(){ try{ return JSON.parse(localStorage.getItem('irtysh_qday')||'{}'); }catch(e){ return {}; } }
 function renderQday(){
   const el=$('#qday'); if(!el) return;
-  const i=(qdayIndex()+qOff)%QDAY.length, Q=QDAY[i], st=qStore(), today=new Date().toDateString();
-  el.innerHTML=`<div class="qh"><span style="font-size:26px">🧩</span><div><b>${qOff?'Ещё вопрос':'Вопрос дня'}</b><br><small>ИИ · Python · дроны · агро</small></div><span class="qs" title="Дней подряд с правильным ответом">🔥 ${st.streak||0}</span></div>
+  const i=(qdayIndex()+qOff)%QDAY.length, Q0=QDAY[i], st=qStore(), today=new Date().toDateString();
+  const ord=Q0.o.map((_,k)=>k).sort((x,y)=>((x*7+i*13)%5)-((y*7+i*13)%5)), Q={...Q0, o:ord.map(k=>Q0.o[k]), r:ord.indexOf(Q0.r)};
+  el.innerHTML=`<div class="qh"><span style="font-size:26px">🧩</span><div><b>${qOff?'Ещё вопрос':'Вопрос дня'}</b><br><small>ИИ · космос · дроны · агро · наука</small></div><span class="qs" title="Дней подряд с правильным ответом">🔥 ${st.streak||0}</span></div>
     <div class="qb"><div class="qq">${esc(Q.q)}</div>${Q.code?`<pre>${esc(Q.code)}</pre>`:''}
     <div class="qopts">${Q.o.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div id="qExp"></div></div>`;
   el.querySelectorAll('.qopts button').forEach(b=>b.onclick=()=>{
@@ -1530,7 +1623,7 @@ function hit(page){
       showVisits(j.total); }).catch(()=>{});
   }catch(e){}
 }
-const PAGE_NAMES={school:'Сайт школы', agro:'Агрокласс', vzlet:'Клуб "Взлёт"'};
+const PAGE_NAMES={school:'Сайт школы', agro:'Агрокласс', vzlet:'Клуб "Взлёт"', spectr:'Ресурсный центр "Спектр"', sport:'Спорткомплекс'};
 async function openStats(){
   $('#mbody').innerHTML='<h3>Посещения сайта</h3><p style="color:var(--dim)">Загружаю…</p>'; openM();
   let st; try{ st=(await api({op:'stats'})).stats; }catch(e){ $('#mbody').innerHTML=`<h3>Посещения сайта</h3><p>${esc(e.message)}</p>`; return; }
@@ -1542,7 +1635,7 @@ async function openStats(){
     <b style="font-size:14px">Последние ${days.length} дн.</b>
     <div class="stbar">${days.map(d=>`<div style="height:${Math.max(3,d.v/mx*100)}%" data-t="${fmtD(d.d)}: ${d.v} (уник. ${d.u})"></div>`).join('')||'<p style="color:var(--dim)">Пока нет данных</p>'}</div>
     <table class="sttab"><tr><th>Страница</th><th>Открытий</th></tr>${Object.keys(st.pages).map(p=>`<tr><td>${esc(PAGE_NAMES[p]||p)}</td><td><b>${st.pages[p]}</b></td></tr>`).join('')}</table>
-    ${st.editors?`<h3 style="margin-top:18px;font-size:16px">Редакторы: входы и правки</h3><table class="sttab"><tr><th>Кто</th><th>Входов</th><th>Правок</th><th>Последний раз</th></tr>${st.editors.map(e=>`<tr><td>${esc(e.name)}</td><td><b>${e.logins}</b></td><td>${e.edits}</td><td style="color:var(--dim)">${esc(e.last)}</td></tr>`).join('')}</table>`:''}
+    ${st.editors?`<h3 style="margin-top:18px;font-size:16px">Редакторы: входы и правки</h3><table class="sttab"><tr><th>Кто</th><th>Входов</th><th>Правок</th><th>Последний раз</th></tr>${st.editors.map(e=>`<tr><td>${esc(niceName(e.name))}</td><td><b>${e.logins}</b></td><td>${e.edits}</td><td style="color:var(--dim)">${esc(e.last)}</td></tr>`).join('')}</table>`:''}
     <div class="mbar"><button class="ibtn" onclick="closeM()">Закрыть</button></div>`;
 }
 
