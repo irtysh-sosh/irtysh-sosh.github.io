@@ -185,6 +185,132 @@ footer{color:var(--dim); font-size:13px; text-align:center; padding:26px 0 40px}
 .diveov.on{clip-path:circle(150vmax at var(--x) var(--y))}
 *{scrollbar-width:thin; scrollbar-color:color-mix(in srgb,var(--brand) 75%,transparent) transparent}
 ::-webkit-scrollbar{width:6px; height:6px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--brand); border-radius:6px}
+/* ---------- лаборатории: новое ---------- */
+.phero{display:grid; grid-template-columns:1.6fr 1fr; gap:14px; align-items:stretch; margin-bottom:6px}
+@media(max-width:860px){ .phero{grid-template-columns:1fr} }
+.phx{border-radius:22px; padding:24px; color:#fff; position:relative; overflow:hidden; background-size:220% 220%; animation:grad 14s ease infinite}
+.pyh .phx{background-image:linear-gradient(120deg,#0f172a,#1d4ed8,#16a34a)}
+.aih .phx{background-image:linear-gradient(120deg,#3b0764,#7c3aed,#db2777)}
+.phx::after{content:""; position:absolute; right:-60px; top:-60px; width:240px; height:240px; border-radius:50%; background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%)}
+.phx .k{font-size:12px; font-weight:800; letter-spacing:.8px; text-transform:uppercase; opacity:.85}
+.phx h1{font:700 26px Unbounded,sans-serif; line-height:1.25; margin:8px 0 10px}
+.phx p{opacity:.93; max-width:640px}
+.jump{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; position:relative; z-index:1}
+.jump a{color:#fff; text-decoration:none; font-weight:800; font-size:13px; padding:7px 12px; border-radius:999px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.32); transition:.2s}
+.jump a:hover{background:rgba(255,255,255,.3); transform:translateY(-2px)}
+.xpcard{background:var(--card); border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow); padding:18px; display:flex; flex-direction:column; gap:10px; justify-content:center}
+.xpcard .lvl{display:flex; align-items:center; gap:12px}
+.xpcard .ava{width:58px; height:58px; border-radius:18px; display:grid; place-items:center; font-size:30px; background:linear-gradient(135deg,#fde047,#f97316); box-shadow:0 8px 20px rgba(249,115,22,.35)}
+.xpcard b.t{font:700 17px Unbounded,sans-serif; display:block}
+.xpcard .xpb{height:12px; border-radius:8px; background:var(--bg2); overflow:hidden}
+.xpcard .xpb i{display:block; height:100%; background:linear-gradient(90deg,#f59e0b,#ef4444,#8b5cf6); border-radius:8px; transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.xpcard small{color:var(--dim)}
+.xpchip{display:inline-flex; align-items:center; gap:6px; font-weight:800; font-size:13px; padding:6px 11px; border-radius:999px; background:linear-gradient(135deg,#f59e0b,#ef4444); color:#fff; white-space:nowrap; cursor:default}
+@media(max-width:700px){ .xpchip .xl{display:none} } @media(max-width:560px){ .xpchip{display:none} }
+.xpfly{position:fixed; z-index:300; font:800 18px Unbounded,sans-serif; color:#f59e0b; text-shadow:0 2px 10px rgba(0,0,0,.25); pointer-events:none; animation:xpf 1.2s ease-out forwards}
+@keyframes xpf{from{opacity:1; transform:translate(-50%,0) scale(.8)} to{opacity:0; transform:translate(-50%,-70px) scale(1.2)}}
+
+.pdesc{font-size:14px; background:color-mix(in srgb,var(--brand2) 10%,transparent); border-left:4px solid var(--brand2); border-radius:0 12px 12px 0; padding:9px 12px; margin-bottom:10px}
+.cmds{margin:6px 0 4px} .cmds summary{cursor:pointer; font-weight:700; color:var(--brand); font-size:14px}
+.cmdg{display:grid; grid-template-columns:1fr 1fr; gap:6px 14px; margin-top:8px; font-size:13px; color:var(--dim)} @media(max-width:520px){ .cmdg{grid-template-columns:1fr} }
+.cmdg code{font:600 12.5px 'JetBrains Mono',monospace; color:var(--text); background:var(--bg2); padding:1px 6px; border-radius:6px; margin-right:4px}
+.expl{margin-top:10px; border-radius:14px; border:1px solid var(--line); overflow:hidden; max-height:420px; overflow-y:auto}
+.expl.off{display:none}
+.expl .el{display:grid; grid-template-columns:30px minmax(0,.9fr) minmax(0,1.3fr); gap:10px; align-items:start; padding:8px 10px; border-bottom:1px dashed var(--line); font-size:13.5px; transition:background .25s}
+.expl .el:last-child{border-bottom:none}
+.expl .el .n{color:var(--dim); font:600 12px 'JetBrains Mono',monospace; padding-top:2px}
+.expl .el code{font:600 12.5px/1.5 'JetBrains Mono',monospace; white-space:pre-wrap; word-break:break-word}
+.expl .el.cm code{color:#6b8f78; font-style:italic}
+.expl .el.bad{background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.expl .el.cur{background:color-mix(in srgb,#f59e0b 22%,transparent)}
+.expl .el.cur .n{color:#f59e0b; font-weight:800}
+@media(max-width:560px){ .expl .el{grid-template-columns:24px 1fr} .expl .el span:last-child{grid-column:2} }
+.tele{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px}
+.tele span{font:600 12.5px 'JetBrains Mono',monospace; background:var(--bg2); border-radius:10px; padding:5px 9px}
+.tele span.lowb{background:color-mix(in srgb,var(--bad) 18%,transparent); color:var(--bad)}
+.nowstep{margin-top:10px; font-size:14px; padding:10px 12px; border-radius:12px; background:color-mix(in srgb,#f59e0b 12%,transparent); min-height:42px}
+.nowstep code{font:700 13px 'JetBrains Mono',monospace}
+
+.missions{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px}
+.mis{position:relative; border-radius:18px; padding:16px; background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px; transition:transform .25s}
+.mis:hover{transform:translateY(-3px)}
+.mis .mt{display:flex; gap:10px; align-items:center}
+.mis .mi{width:44px; height:44px; border-radius:14px; display:grid; place-items:center; font-size:22px; background:var(--bg2); flex-shrink:0}
+.mis h4{font:700 15px Unbounded,sans-serif}
+.mis p{font-size:14px; color:var(--dim); flex:1}
+.mis .st{font-size:22px; letter-spacing:2px; filter:grayscale(1); opacity:.35}
+.mis.done{border-color:#f59e0b; background:linear-gradient(180deg,color-mix(in srgb,#f59e0b 10%,var(--card)),var(--card))}
+.mis.done .st{filter:none; opacity:1}
+.mis.cur{outline:3px solid var(--brand2); outline-offset:2px}
+.mis .lv{font-size:11.5px; font-weight:800; color:var(--dim); text-transform:uppercase; letter-spacing:.5px}
+
+.flips{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px}
+.flip{perspective:900px; height:250px; cursor:pointer}
+.flip .fi{position:relative; width:100%; height:100%; transition:transform .6s cubic-bezier(.3,1.2,.4,1); transform-style:preserve-3d}
+.flip.on .fi{transform:rotateY(180deg)}
+.flip .ff,.flip .fb{position:absolute; inset:0; border-radius:18px; padding:16px; backface-visibility:hidden; -webkit-backface-visibility:hidden; overflow:hidden}
+.flip .ff{color:#fff; display:flex; flex-direction:column; justify-content:space-between}
+.flip .ff .e{font-size:40px; line-height:1}
+.flip .ff h4{font:700 17px Unbounded,sans-serif} .flip .ff small{opacity:.9; font-weight:600}
+.flip .fb{transform:rotateY(180deg); background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow); font-size:13.5px; display:flex; flex-direction:column; gap:8px; overflow:auto}
+.flip .fb pre{font:600 12.5px/1.45 'JetBrains Mono',monospace; background:#0b1a10; color:#d1fae5; border-radius:10px; padding:8px 10px; white-space:pre-wrap}
+
+.qz .qtop{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap}
+.qz .dots{display:flex; gap:5px} .qz .dots i{width:22px; height:6px; border-radius:4px; background:var(--bg2)} .qz .dots i.ok{background:var(--ok)} .qz .dots i.no{background:var(--bad)} .qz .dots i.cur{background:var(--brand2)}
+.qz .qq{font-weight:800; font-size:17px; margin-bottom:10px}
+.qz pre{font:500 14px/1.55 'JetBrains Mono',monospace; background:#0b1a10; color:#d1fae5; border-radius:12px; padding:12px; margin-bottom:12px; white-space:pre-wrap}
+.qz .qo{display:grid; grid-template-columns:1fr 1fr; gap:8px} @media(max-width:600px){ .qz .qo{grid-template-columns:1fr} }
+.qz .qo button{text-align:left; border:2px solid var(--line); background:var(--card); color:var(--text); font:700 14.5px Manrope,sans-serif; padding:12px 14px; border-radius:14px; cursor:pointer; transition:.2s}
+.qz .qo button:hover:not(:disabled){border-color:var(--brand); transform:translateY(-2px)}
+.qz .qo button.right{border-color:var(--ok); background:color-mix(in srgb,var(--ok) 14%,transparent)} .qz .qo button.wrong{border-color:var(--bad); background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.qz .qe{margin-top:12px; padding:12px 14px; border-radius:14px; background:color-mix(in srgb,var(--brand2) 10%,transparent); animation:pop .3s}
+.qz .fin{text-align:center; padding:18px} .qz .fin .sc{font:700 46px Unbounded,sans-serif}
+
+.annot{display:flex; flex-direction:column; gap:8px; margin-top:10px}
+.annot>div{display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:10px; align-items:center}
+.annot pre.code{padding:8px 10px; font-size:12.5px; border-radius:10px}
+.annot p{font-size:13.5px; color:var(--dim)}
+@media(max-width:560px){ .annot>div{grid-template-columns:1fr} }
+
+.life{display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px}
+.life>div{border-radius:18px; padding:16px; color:#fff; min-height:150px; position:relative; overflow:hidden}
+.life .e{font-size:34px} .life h4{font:700 15px Unbounded,sans-serif; margin:6px 0 4px} .life p{font-size:13px; opacity:.93}
+
+.poll .pq{font:700 17px Unbounded,sans-serif; margin-bottom:12px}
+.poll .po{display:flex; flex-direction:column; gap:8px}
+.poll .po button{position:relative; overflow:hidden; text-align:left; border:2px solid var(--line); background:var(--card); color:var(--text); font:700 14.5px Manrope,sans-serif; padding:12px 14px; border-radius:14px; cursor:pointer}
+.poll .po button:hover:not(:disabled){border-color:var(--brand)}
+.poll .po button:disabled{cursor:default}
+.poll .po button .bf{position:absolute; left:0; top:0; bottom:0; width:0; background:color-mix(in srgb,var(--brand) 18%,transparent); transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.poll .po button.me{border-color:var(--brand)}
+.poll .po button span{position:relative} .poll .po button .pc{float:right}
+.poll small{display:block; color:var(--dim); margin-top:8px}
+
+.steps4{display:grid; grid-template-columns:repeat(4,1fr); gap:12px} @media(max-width:900px){ .steps4{grid-template-columns:1fr 1fr} } @media(max-width:520px){ .steps4{grid-template-columns:1fr} }
+.steps4>div{border-radius:18px; padding:16px; background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow); position:relative}
+.steps4 .sn{position:absolute; top:10px; right:14px; font:700 34px Unbounded,sans-serif; opacity:.1}
+.steps4 .e{font-size:32px} .steps4 h4{font:700 15px Unbounded,sans-serif; margin:6px 0} .steps4 p{font-size:13.5px; color:var(--dim)}
+.nw{margin-top:14px}
+.nw .sent{font:600 19px Manrope,sans-serif; margin:10px 0 14px} .nw .sent .gap{display:inline-block; min-width:90px; border-bottom:3px dashed var(--brand); color:var(--brand); font-weight:800; text-align:center}
+.nw .opts{display:flex; flex-direction:column; gap:6px}
+.nw .opts button{position:relative; overflow:hidden; text-align:left; border:1px solid var(--line); background:var(--bg2); color:var(--text); font:700 14.5px Manrope,sans-serif; padding:10px 12px; border-radius:12px; cursor:pointer}
+.nw .opts button .bf{position:absolute; left:0; top:0; bottom:0; width:0; background:linear-gradient(90deg,#8b5cf6,#db2777); opacity:.3; transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.nw .opts button span{position:relative} .nw .opts button .pc{float:right; font-family:'JetBrains Mono',monospace}
+.nw .opts button.pick{border-color:#8b5cf6}
+.fix .fp{font:500 14px/1.6 'JetBrains Mono',monospace; background:var(--bg2); border-radius:12px; padding:12px; white-space:pre-wrap; margin:10px 0}
+.fix .fo{display:flex; gap:8px; flex-wrap:wrap}
+.fix .fo button{border:2px solid var(--line); background:var(--card); color:var(--text); font:800 14px Manrope,sans-serif; padding:9px 14px; border-radius:999px; cursor:pointer}
+.fix .fo button.right{border-color:var(--ok); background:color-mix(in srgb,var(--ok) 14%,transparent)} .fix .fo button.wrong{border-color:var(--bad); background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.pscore{font-weight:800; color:#f59e0b; margin-left:6px}
+.myth .mq{font:700 18px Manrope,sans-serif; margin:8px 0 14px}
+.myth .mb{display:flex; gap:10px} .myth .mb button{flex:1; height:52px; border-radius:14px; border:none; color:#fff; font:800 16px Unbounded,sans-serif; cursor:pointer; transition:.2s}
+.myth .mb button:hover:not(:disabled){transform:translateY(-2px)} .myth .mb button:disabled{opacity:.45; cursor:default}
+.myth .mb .t{background:linear-gradient(135deg,#16a34a,#0d9488)} .myth .mb .f{background:linear-gradient(135deg,#dc2626,#db2777)}
+.safe{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px}
+.safe>div{display:flex; gap:12px; align-items:flex-start; border-radius:18px; padding:14px 16px; background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow)}
+.safe .e{font-size:28px; line-height:1} .safe b{display:block; margin-bottom:2px} .safe p{font-size:13.5px; color:var(--dim)}
+h2.sec{scroll-margin-top:130px}
+#presetSel .list{left:auto; right:0; max-width:calc(100vw - 32px)} #presetSel .list button{white-space:normal}
 </style>
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#16a34a">
@@ -197,7 +323,7 @@ footer{color:var(--dim); font-size:13px; text-align:center; padding:26px 0 40px}
   <div class="top">
     <div class="tl"><a class="back" data-dive href="../" title="На главную школы"><svg class="i" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg><span>Школа</span></a></div>
     <div class="brand"><div class="script">Агрокласс</div><p>Беспилотные авиасистемы в АПК · 8-9 классы · МБОУ Иртышская СОШ</p></div>
-    <div class="tr"><div class="clock"><div class="ct" id="clk"></div><div class="cd2" id="clkd"></div></div>
+    <div class="tr"><span class="xpchip" id="xpChip" title="Твой опыт: уроки, тесты, миссии и викторины"></span><div class="clock"><div class="ct" id="clk"></div><div class="cd2" id="clkd"></div></div>
       <button class="ibtn" id="themeBtn" title="Тема"><svg class="i" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/></svg></button></div>
   </div>
   <nav class="tabsnav" id="nav">
@@ -254,21 +380,54 @@ footer{color:var(--dim); font-size:13px; text-align:center; padding:26px 0 40px}
 
   <!-- ЛАБОРАТОРИЯ PYTHON -->
   <section class="view" id="v-py">
-    <h2 class="sec">Лаборатория Python <small>понимаешь логику - можешь всё остальное</small></h2>
+    <div class="phero pyh">
+      <div class="phx">
+        <div class="k">Лаборатория Python</div>
+        <h1>Научи дрон летать кодом</h1>
+        <p>Пиши программу - дрон выполняет её на поле. К каждой строке есть пояснение, так что разобраться сможет любой. Проходи миссии, собирай звёзды и прокачивай уровень.</p>
+        <div class="jump"><a href="#simT">▶ Тренажёр</a><a href="#missions">🎯 Миссии</a><a href="#cheat">🧠 Шпаргалка</a><a href="#pyquiz">❓ Проверь себя</a><a href="#fieldT">🌾 Анализ поля</a></div>
+      </div>
+      <div class="xpcard" id="xpPy"></div>
+    </div>
     <div class="show" id="show"></div>
 
-    <h2 class="sec" id="simT">1. Запрограммируй полёт над полем</h2>
+    <h2 class="sec" id="simT">1. Тренажёр полёта <small>выбери программу, нажми ▶ и следи за пояснениями</small></h2>
     <div class="lab">
       <div class="card">
         <div class="row" style="margin-top:0"><b style="flex:1">Код программы</b><div class="fsel" id="presetSel"></div></div>
+        <div class="pdesc" id="pDesc"></div>
         <textarea class="code" id="src" spellcheck="false"></textarea>
-        <div class="row"><button class="ibtn pri" id="runBtn">▶ Запустить</button><button class="ibtn sm" id="stopBtn">■ Стоп</button><small style="color:var(--dim)">Команды: takeoff(), forward(м), back(м), left(м), right(м), turn(градусы), photo(), land(), for i in range(n):</small></div>
+        <div class="row"><button class="ibtn pri" id="runBtn">▶ Запустить</button><button class="ibtn sm" id="stopBtn">■ Стоп</button><button class="ibtn sm" id="explBtn">🧠 Пояснения: вкл</button></div>
+        <details class="cmds"><summary>Какие команды понимает дрон</summary>
+          <div class="cmdg">
+            <span><code>takeoff()</code> взлёт</span><span><code>land()</code> посадка</span>
+            <span><code>forward(3)</code> вперёд, м</span><span><code>back(3)</code> назад, м</span>
+            <span><code>left(2)</code> влево, м</span><span><code>right(2)</code> вправо, м</span>
+            <span><code>turn(90)</code> поворот, градусы</span><span><code>photo()</code> снимок</span>
+            <span><code>for i in range(4):</code> повторить</span><span><code>n = 5</code> переменная</span>
+            <span><code>print("Привет")</code> вывод</span><span><code># текст</code> комментарий</span>
+          </div></details>
+        <div class="expl" id="expl"></div>
       </div>
-      <div class="card"><canvas id="sim" width="560" height="420"></canvas><div class="out" id="simOut">Нажмите "Запустить" - дрон полетит по вашей программе.</div></div>
+      <div class="card simcard">
+        <div class="tele" id="tele"></div>
+        <canvas id="sim" width="560" height="420"></canvas>
+        <div class="nowstep" id="nowStep">Здесь будет видно, какую строку дрон выполняет прямо сейчас.</div>
+        <div class="out" id="simOut">Нажми "Запустить" - дрон полетит по твоей программе.</div>
+      </div>
     </div>
-    <p style="color:var(--dim);font-size:13px;margin-top:8px">Это учебный тренажёр: язык как в Python, но упрощённый. Команды настоящего дрона (API DroneCam) изучаем в модуле 7 - логика та же.</p>
+    <p style="color:var(--dim);font-size:13px;margin-top:8px">Это учебный тренажёр: язык как в Python, но упрощённый. Настоящий дрон (API DroneCam) изучаем в модуле 7 - логика та же.</p>
 
-    <h2 class="sec">2. Найди проблемные участки поля по фото</h2>
+    <h2 class="sec" id="missions">2. Миссии <small>выполни задание - получи звезду и XP</small></h2>
+    <div class="missions" id="missionsL"></div>
+
+    <h2 class="sec" id="cheat">3. Шпаргалка: Python за 10 карточек <small>нажми на карточку - она перевернётся</small></h2>
+    <div class="flips" id="flips"></div>
+
+    <h2 class="sec" id="pyquiz">4. Проверь себя: что сделает код? <small>10 вопросов, за каждый верный ответ +5 XP</small></h2>
+    <div class="card" id="pyQuiz"></div>
+
+    <h2 class="sec" id="fieldT">5. Найди проблемные участки поля по фото <small>так работает "зрение" агродрона</small></h2>
     <div class="lab">
       <div class="card"><canvas id="fieldC" width="560" height="340"></canvas>
         <div class="row"><b>Порог "здоровой зелени":</b><span id="thrV" style="font-weight:800;color:var(--brand)"></span></div>
@@ -276,42 +435,74 @@ footer{color:var(--dim); font-size:13px; text-align:center; padding:26px 0 40px}
         <div class="meter"><div><small>Здоровые посевы</small><b id="mOk" style="color:var(--ok)">0%</b></div><div><small>Проблемные зоны</small><b id="mBad" style="color:var(--warn)">0%</b></div><div><small>Решение</small><b id="mAct" style="font-size:15px">-</b></div></div>
         <div class="row"><button class="ibtn sm" id="newField">Новое поле</button><button class="ibtn sm" id="showMask">Показать карту зон</button></div>
       </div>
-      <div class="card"><b>Как это работает</b>
-<pre class="code"><span class="cm"># Фото поля с дрона - это сетка пикселей (R, G, B)</span>
-<span class="fn">здоровых</span> = <span class="num2">0</span>
-<span class="kw">for</span> пиксель <span class="kw">in</span> фото:
-    r, g, b = пиксель
-    индекс = <span class="num2">2</span>*g - r - b   <span class="cm"># "индекс зелени" ExG</span>
-    <span class="kw">if</span> индекс &gt; порог:
-        здоровых += <span class="num2">1</span>
-
-процент = здоровых / <span class="fn">len</span>(фото) * <span class="num2">100</span>
-<span class="fn">print</span>(<span class="kw">f</span>"Здоровых посевов: {процент:.0f}%")</pre>
-        <p style="margin-top:10px">Растения отражают много зелёного света, а сухая трава и земля - больше красного. Поэтому формула <b>2G - R - B</b> "подсвечивает" живые растения. Агрономы используют похожие индексы (например, NDVI с инфракрасной камерой), чтобы заранее найти, где посевам плохо.</p>
+      <div class="card"><b>Как это работает - разбор по строкам</b>
+        <div class="annot">
+          <div><pre class="code"><span class="cm"># Фото поля с дрона - это сетка пикселей</span></pre><p>Каждый пиксель хранит три числа: сколько в нём красного (R), зелёного (G) и синего (B).</p></div>
+          <div><pre class="code"><span class="fn">здоровых</span> = <span class="num2">0</span></pre><p>Заводим счётчик. Сначала здоровых пикселей ноль.</p></div>
+          <div><pre class="code"><span class="kw">for</span> пиксель <span class="kw">in</span> фото:
+    r, g, b = пиксель</pre><p>Перебираем все пиксели по одному и достаём из каждого три цвета.</p></div>
+          <div><pre class="code">    индекс = <span class="num2">2</span>*g - r - b</pre><p>"Индекс зелени": удваиваем зелёный и вычитаем остальные цвета. У живого растения он большой.</p></div>
+          <div><pre class="code">    <span class="kw">if</span> индекс &gt; порог:
+        здоровых += <span class="num2">1</span></pre><p>Если зелени больше порога (ползунок слева) - засчитываем пиксель как здоровый.</p></div>
+          <div><pre class="code">процент = здоровых / <span class="fn">len</span>(фото) * <span class="num2">100</span></pre><p>Делим здоровые пиксели на все и получаем процент здорового поля.</p></div>
+        </div>
+        <p style="margin-top:10px">Растения отражают много зелёного света, а сухая трава и земля - больше красного. Агрономы используют похожие индексы (например, NDVI с инфракрасной камерой), чтобы заранее найти, где посевам плохо.</p>
       </div>
     </div>
+
+    <h2 class="sec">6. Где живёт Python <small>зачем он в жизни, а не только на уроке</small></h2>
+    <div class="life" id="life"></div>
+
+    <h2 class="sec">Опрос <small>ответ анонимный - смотри, что думают другие</small></h2>
+    <div class="card poll" id="pollPy" data-poll="py_level" data-q="Python для тебя сейчас - это..."></div>
   </section>
 
   <!-- ПРОМПТ-ИНЖИНИРИНГ -->
   <section class="view" id="v-ai">
-    <h2 class="sec">Промпт-инжиниринг <small>как ставить задачу нейросети, чтобы получить нужный результат</small></h2>
+    <div class="phero aih">
+      <div class="phx">
+        <div class="k">Промпт-инжиниринг</div>
+        <h1>Как говорить с ИИ, чтобы он реально помогал</h1>
+        <p>Нейросеть - как очень начитанный помощник, который не умеет читать мысли. Здесь ты поймёшь, как она "думает", научишься ставить задачу и узнаешь, где ИИ может подвести.</p>
+        <div class="jump"><a href="#howAI">🧠 Как думает ИИ</a><a href="#formulaT">🧪 Формула промпта</a><a href="#fixT">🎮 Игра</a><a href="#builderT">🛠 Конструктор</a><a href="#mythT">❓ Миф или правда</a><a href="#safeT">🛡 Безопасность</a></div>
+      </div>
+      <div class="xpcard" id="xpAi"></div>
+    </div>
+
+    <h2 class="sec" id="howAI">1. Как думает нейросеть - за 60 секунд</h2>
+    <div class="steps4" id="steps4"></div>
+    <div class="card nw" id="nextWord"></div>
+
+    <h2 class="sec" id="formulaT">2. Формула хорошего промпта</h2>
     <div class="card">
-      <b>Формула хорошего промпта</b>
       <div class="formula" id="formula"></div>
-      <p style="color:var(--dim)">Нейросеть не читает мысли: чем точнее роль, задача, данные и формат ответа - тем полезнее результат. Это тот же навык, что и в программировании: чётко сформулировать логику.</p>
+      <p style="color:var(--dim)">Чем точнее роль, задача, данные и формат ответа - тем полезнее результат. Это тот же навык, что и в программировании: чётко сформулировать логику.</p>
     </div>
     <h2 class="sec" style="font-size:18px">Сравни два запроса</h2>
     <div id="pairs"></div>
-    <h2 class="sec" style="font-size:18px">Конструктор промпта</h2>
+
+    <h2 class="sec" id="fixT">3. Игра: чего не хватает в промпте?</h2>
+    <div class="card" id="fixGame"></div>
+
+    <h2 class="sec" id="builderT">4. Конструктор промпта <small>собери запрос из кубиков и вставь в любую нейросеть</small></h2>
     <div class="card pb">
       <label>1. Роль - кем должна быть нейросеть</label><div class="chips" id="pbRole"></div>
       <label>2. Задача</label><div class="chips" id="pbTask"></div>
       <label>3. Контекст и данные</label><textarea id="pbCtx">Учебный квадрокоптер ARA EDU, поле 100 на 50 метров, высота полёта 10 метров.</textarea>
       <label>4. Формат ответа</label><div class="chips" id="pbFmt"></div>
       <label>5. Ограничения</label><div class="chips" id="pbLim"></div>
-      <label>Готовый промпт</label><div class="ptxt" id="pbOut"></div>
-      <div class="row"><button class="ibtn pri" id="pbCopy">Скопировать</button><small style="color:var(--dim)">Вставьте в любую нейросеть и сравните с ответом на короткий запрос.</small></div>
+      <label>Готовый промпт <span class="pscore" id="pbScore"></span></label><div class="ptxt" id="pbOut"></div>
+      <div class="row"><button class="ibtn pri" id="pbCopy">Скопировать</button><small style="color:var(--dim)">Вставь в любую нейросеть и сравни с ответом на короткий запрос.</small></div>
     </div>
+
+    <h2 class="sec" id="mythT">5. Миф или правда? <small>8 утверждений про ИИ</small></h2>
+    <div class="card" id="myths"></div>
+
+    <h2 class="sec" id="safeT">6. Правила безопасного ИИ</h2>
+    <div class="safe" id="safe"></div>
+
+    <h2 class="sec">Опрос <small>ответ анонимный - смотри, что думают другие</small></h2>
+    <div class="card poll" id="pollAi" data-poll="ai_use" data-q="Для чего ты чаще всего используешь нейросети?"></div>
   </section>
 </main>
 <footer>Агрокласс · МБОУ Иртышская СОШ · учебные материалы: Applied Robotics (ARA EDU, DroneCam)</footer>
@@ -440,9 +631,10 @@ addEventListener('pageshow',()=>document.querySelectorAll('.diveov').forEach(o=>
 (function(){ let f=null; try{ f=sessionStorage.getItem('dive'); sessionStorage.removeItem('dive'); }catch(_){} if(!f) return;
   const o=document.createElement('div'); o.className='diveov on'; o.style.setProperty('--x','50%'); o.style.setProperty('--y','50%'); o.style.transition='none'; document.body.appendChild(o);
   requestAnimationFrame(()=>requestAnimationFrame(()=>{ o.style.transition=''; o.classList.remove('on'); setTimeout(()=>o.remove(),800); })); })();
+const API='https://script.google.com/macros/s/AKfycbwmh9Ksw7lm9pYZCy3ao-mvZ5ogKbFM7E66zJIAa5ZvorA6q7FLH8ZlFZvFK9RKHRM-/exec';  // сервер школы: счётчик и опросы
 const LS='agro_progress_v2';
 let P={}; try{ P=JSON.parse(localStorage.getItem(LS)||'{}'); }catch(e){}
-const saveP=()=>{ try{ localStorage.setItem(LS,JSON.stringify(P)); }catch(e){} };
+const saveP=()=>{ try{ localStorage.setItem(LS,JSON.stringify(P)); }catch(e){} if(typeof renderXP==='function') renderXP(); };
 const lk=(m,i)=>`${m}:${i}`;
 function toast(t){ const e=$('#toast'); e.textContent=t; e.classList.add('on'); clearTimeout(e._t); e._t=setTimeout(()=>e.classList.remove('on'),2200); }
 function plural(n,a,b,c){ n=Math.abs(n)%100; const n1=n%10; if(n>10&&n<20)return c; if(n1>1&&n1<5)return b; if(n1===1)return a; return c; }
@@ -550,22 +742,53 @@ function bindTest(m){
 }
 
 /* ============================================================
+   ОПЫТ (XP) И УРОВНИ - считаются на этом устройстве
+   ============================================================ */
+const LEVELS=[[0,'Новичок','🐣'],[60,'Курсант','🎒'],[160,'Пилот','🚁'],[320,'Оператор БПЛА','🛰'],[520,'Инженер','🛠'],[800,'Агро-профи','🏆']];
+function xpTotal(){
+  let x=0;
+  MODULES.forEach(m=>{ m.lessons.forEach((_,i)=>{ if(P[lk(m.id,i)]) x+=10; }); if(P['t:'+m.id]?.pass) x+=50; });
+  Object.keys(P).forEach(k=>{ if(k.startsWith('x:')) x+=+P[k]||0; });
+  return x;
+}
+function levelOf(x){ let i=0; LEVELS.forEach((l,k)=>{ if(x>=l[0]) i=k; }); const cur=LEVELS[i], nxt=LEVELS[i+1]; return {i, name:cur[1], ico:cur[2], from:cur[0], to:nxt?nxt[0]:null, next:nxt?nxt[1]:null}; }
+function addXP(id, pts, ev){
+  if(P['x:'+id]) return false;
+  const before=levelOf(xpTotal()).i;
+  P['x:'+id]=pts; saveP();
+  const f=document.createElement('div'); f.className='xpfly'; f.textContent=`+${pts} XP`;
+  const x=ev&&ev.clientX?ev.clientX:innerWidth/2, y=ev&&ev.clientY?ev.clientY:innerHeight/2; f.style.left=x+'px'; f.style.top=(y-20)+'px';
+  document.body.appendChild(f); setTimeout(()=>f.remove(),1300);
+  const L=levelOf(xpTotal()); if(L.i>before) setTimeout(()=>toast(`${L.ico} Новый уровень: ${L.name}!`),600);
+  renderXP(); return true;
+}
+function renderXP(){
+  const x=xpTotal(), L=levelOf(x), pct=L.to?Math.round((x-L.from)/(L.to-L.from)*100):100;
+  const html=`<div class="lvl"><div class="ava">${L.ico}</div><div><small>Твой уровень</small><b class="t">${L.name}</b><small>${x} XP</small></div></div>
+    <div class="xpb"><i style="width:${pct}%"></i></div>
+    <small>${L.to?`До уровня "${L.next}" осталось ${L.to-x} XP`:'Максимальный уровень - ты агро-профи!'}</small>
+    <small>XP дают уроки, тесты, миссии, викторины и опросы.</small>`;
+  document.querySelectorAll('.xpcard').forEach(e=>e.innerHTML=html);
+  const c=document.getElementById('xpChip'); if(c) c.innerHTML=`${L.ico} ${x} XP<span class="xl"> · ${L.name}</span>`;
+}
+
+/* ============================================================
    ЛАБОРАТОРИЯ PYTHON
    ============================================================ */
 const SHOW=[
   {t:'Полёт по программе', d:'Цикл из 2 строк заменяет 16 команд - дрон облетит поле змейкой.', i:'map', g:'#ca8a04,#f97316', go:'simT'},
-  {t:'Здоровье посевов по фото', d:'Считаем "индекс зелени" пикселей и находим проблемные участки.', i:'leaf', g:'#15803d,#84cc16', go:'fieldC'},
+  {t:'Здоровье посевов по фото', d:'Считаем "индекс зелени" пикселей и находим проблемные участки.', i:'leaf', g:'#15803d,#84cc16', go:'fieldT'},
   {t:'Автопосадка на маркер', d:'Камера видит ArUco-метку, код корректирует курс - и дрон садится сам.', i:'target', g:'#be123c,#f97316', mod:'m8'},
   {t:'Отчёт агроному', d:'Python собирает данные облёта в таблицу, а нейросеть помогает оформить выводы.', i:'chart', g:'#1d4ed8,#0ea5e9', view:'ai'}
 ];
 const PRESETS={
-  'Квадрат 4 м':`# Облёт квадратного участка
+  'Квадрат 4 м':{d:'Самая простая фигура: 4 раза "вперёд и поворот направо". Дрон вернётся туда, откуда взлетел.', c:`# Облёт квадратного участка
 takeoff()
 for i in range(4):
     forward(4)
     turn(90)
-land()`,
-  'Змейка по полю':`# Облёт поля "змейкой" с фото
+land()`},
+  'Змейка по полю':{d:'Так настоящие агродроны снимают поле: полоса вверх, сдвиг, полоса вниз. На каждой полосе - фото.', c:`# Облёт поля "змейкой" с фото
 takeoff()
 for i in range(3):
     forward(6)
@@ -578,98 +801,328 @@ for i in range(3):
     turn(-90)
     forward(1.5)
     turn(-90)
-land()`,
-  'Фото каждые 2 м':`# Съёмка вдоль ряда
+land()`},
+  'Треугольник':{d:'Сумма внешних углов любой фигуры - 360°. У треугольника 3 угла, значит, поворот 360 / 3 = 120°.', c:`# Треугольник: поворот на 120 градусов
 takeoff()
-for i in range(4):
-    forward(2)
+for i in range(3):
+    forward(5)
+    turn(120)
+land()`},
+  'Звезда':{d:'Поворот на 144° рисует пятиконечную звезду. Попробуй поменять 144 на 135 и посмотри, что будет.', c:`# Пятиконечная звезда
+takeoff()
+for i in range(5):
+    forward(5)
+    turn(144)
+land()`},
+  'Спираль (переменная i)':{d:'Счётчик цикла i растёт: 0, 1, 2... Поэтому forward(i + 1) каждый раз летит на метр дальше.', c:`# Спираль: с каждым витком дальше
+takeoff()
+for i in range(6):
+    forward(i + 1)
+    turn(90)
+land()`},
+  'Сетка фото 3 x 3':{d:'Цикл внутри цикла: внешний перебирает ряды, внутренний - снимки в ряду. Итого 3 x 3 = 9 кадров.', c:`# Съёмка поля сеткой: цикл в цикле
+шаг = 3
+takeoff()
+for ряд in range(3):
+    for кадр in range(3):
+        photo()
+        forward(шаг)
+    back(шаг * 3)
+    right(шаг)
+left(шаг * 3)
+land()
+print("Снято 9 кадров, дрон дома!")`},
+  'Облёт границы поля':{d:'Прямоугольник 8 на 5 м с фото в каждом углу. Переменные длина и ширина можно менять.', c:`# Облёт границы поля с фото углов
+длина = 8
+ширина = 5
+takeoff()
+for i in range(2):
+    forward(длина)
     photo()
-land()`,
-  'С ошибкой (найди её)':`takeoff()
+    turn(90)
+    forward(ширина)
+    photo()
+    turn(90)
+land()`},
+  'Ошибка 1: найди её':{d:'В программе ошибка. Запусти - Python подскажет строку. Исправь и запусти снова.', c:`takeoff()
 for i in range(4)
     forward(3)
     turn(90)
-land()`
+land()`},
+  'Ошибка 2: найди её':{d:'Дрон отказывается лететь. Почему?', c:`# облёт квадрата
+for i in range(4):
+    forward(3)
+    turn(90)
+land()`},
+  'Ошибка 3: найди её':{d:'Дрон улетает за границу поля. Какое число надо уменьшить?', c:`takeoff()
+forward(20)
+land()`}
 };
-let pyInit=false, simStop=false;
-function initPy(){
-  if(pyInit) return; pyInit=true;
-  $('#show').innerHTML=SHOW.map((s,k)=>`<div class="sc2" data-k="${k}" style="background:linear-gradient(135deg,${s.g})"><span class="big">${ic(s.i,110)}</span>${ic(s.i,26)}<h4>${s.t}</h4><p>${s.d}</p></div>`).join('');
-  document.querySelectorAll('.sc2').forEach(e=>e.onclick=()=>{ const s=SHOW[+e.dataset.k]; if(s.go) document.getElementById(s.go).scrollIntoView({behavior:'smooth',block:'center'}); else if(s.mod) openMod(s.mod); else if(s.view) document.querySelector(`#nav button[data-v="${s.view}"]`).click(); });
-  reveal('.sc2');
-  const names=Object.keys(PRESETS);
-  $('#src').value=PRESETS[names[1]];
-  fancySelect($('#presetSel'), names.map(n=>({v:n,t:n})), names[1], v=>{ $('#src').value=PRESETS[v]; drawSim([], null); $('#simOut').className='out'; $('#simOut').textContent='Программа загружена. Нажмите "Запустить".'; });
-  $('#src').onkeydown=e=>{ if(e.key==='Tab'){ e.preventDefault(); const t=e.target, s=t.selectionStart; t.value=t.value.slice(0,s)+'    '+t.value.slice(t.selectionEnd); t.selectionStart=t.selectionEnd=s+4; } };
-  $('#runBtn').onclick=runSim; $('#stopBtn').onclick=()=>simStop=true;
-  drawSim([], null);
-  initField();
+
+/* --- вычисление выражений: числа, переменные, + - * / % и скобки --- */
+const ID_RE='[A-Za-zА-Яа-яЁё_][A-Za-zА-Яа-яЁё0-9_]*';
+function evalExpr(src, env, ln){
+  const toks=[]; const re=new RegExp(`\\s*(\\d+(?:\\.\\d+)?|${ID_RE}|[-+*/%()])`,'y'); let m, pos=0; src=String(src).trim();
+  while(pos<src.length){ re.lastIndex=pos; m=re.exec(src); if(!m) throw {ln, msg:`Не понимаю выражение "${src}"`}; toks.push(m[1]); pos=re.lastIndex; while(src[pos]===' ') pos++; }
+  let i=0;
+  const peek=()=>toks[i], next=()=>toks[i++];
+  function prim(){ const t=next(); if(t===undefined) throw {ln, msg:`Выражение "${src}" оборвалось`};
+    if(t==='('){ const v=add(); if(next()!==')') throw {ln, msg:'Не хватает закрывающей скобки ")"'}; return v; }
+    if(t==='-') return -prim();
+    if(/^\d/.test(t)) return +t;
+    if(new RegExp('^'+ID_RE+'$').test(t)){ if(!(t in env)) throw {ln, msg:`Переменная "${t}" не создана. Сначала напиши, например: ${t} = 3`}; return env[t]; }
+    throw {ln, msg:`Лишний знак "${t}"`}; }
+  function mul(){ let v=prim(); while(['*','/','%'].includes(peek())){ const o=next(), r=prim(); if(o==='*') v*=r; else if(o==='/'){ if(r===0) throw {ln, msg:'Делить на ноль нельзя'}; v/=r; } else v%=r; } return v; }
+  function add(){ let v=mul(); while(['+','-'].includes(peek())){ const o=next(), r=mul(); v=o==='+'?v+r:v-r; } return v; }
+  const v=add(); if(i<toks.length) throw {ln, msg:`Лишнее в выражении: "${toks.slice(i).join(' ')}"`}; return v;
 }
-/* мини-интерпретатор учебного языка */
+const CMDS=['takeoff','land','photo','forward','back','left','right','turn','up','down'];
 function parse(src){
   const lines=src.replace(/\t/g,'    ').split('\n'); let pos=0;
   function block(indent){
     const out=[];
     while(pos<lines.length){
-      const raw=lines[pos], ln=pos+1, s=raw.replace(/#.*$/,'').trimEnd();
+      const raw=lines[pos], ln=pos+1, s=stripComment(raw).trimEnd();
       if(!s.trim()){ pos++; continue; }
       const ind=s.length-s.trimStart().length;
       if(ind<indent) break;
       if(ind>indent) throw {ln, msg:'Лишний отступ - строка сдвинута, хотя выше нет "for ...:"'};
       const t=s.trim(); pos++;
       let m;
-      if(m=t.match(/^for\s+\w+\s+in\s+range\(\s*(\d+)\s*\)\s*(:?)$/)){
-        if(!m[2]) throw {ln, msg:'После "for ... in range(...)" нужно поставить двоеточие ":"'};
-        const nx=lines.slice(pos).find(x=>x.replace(/#.*$/,'').trim()); const ni=nx?nx.replace(/\t/g,'    ').length-nx.replace(/\t/g,'    ').trimStart().length:0;
-        if(ni<=indent) throw {ln, msg:'Тело цикла нужно сдвинуть вправо на 4 пробела'};
-        out.push({op:'for', n:+m[1], body:block(ni), ln});
-      } else if(m=t.match(/^(takeoff|land|photo|forward|back|left|right|turn|up|down)\(\s*(-?\d+(?:\.\d+)?)?\s*\)$/)){
-        out.push({op:m[1], v:m[2]!==undefined?+m[2]:null, ln});
-      } else if(/^for\b/.test(t)) throw {ln, msg:'Проверьте цикл: пример - for i in range(4):'};
+      if(m=t.match(new RegExp(`^for\\s+(${ID_RE})\\s+in\\s+range\\((.+)\\)\\s*(:?)$`))){
+        if(!m[3]) throw {ln, msg:'После "for ... in range(...)" нужно поставить двоеточие ":"'};
+        const nx=lines.slice(pos).find(x=>stripComment(x).trim()); const nxs=nx?nx.replace(/\t/g,'    '):''; const ni=nx?nxs.length-nxs.trimStart().length:0;
+        if(!nx || ni<=indent) throw {ln, msg:'Тело цикла нужно сдвинуть вправо на 4 пробела'};
+        out.push({op:'for', v:m[1], n:m[2], body:block(ni), ln});
+      } else if(m=t.match(/^print\((.*)\)$/)){
+        out.push({op:'print', a:m[1], ln});
+      } else if(m=t.match(new RegExp(`^(${CMDS.join('|')})\\((.*)\\)$`))){
+        out.push({op:m[1], a:m[2].trim()||null, ln});
+      } else if(m=t.match(new RegExp(`^(${ID_RE})\\s*=\\s*(.+)$`))){
+        if(CMDS.includes(m[1])||['for','in','range','print'].includes(m[1])) throw {ln, msg:`"${m[1]}" - служебное слово, так назвать переменную нельзя`};
+        out.push({op:'set', name:m[1], e:m[2], ln});
+      } else if(/^for\b/.test(t)) throw {ln, msg:'Проверь цикл: пример - for i in range(4):'};
+      else if(new RegExp(`^(${CMDS.join('|')})\\b`).test(t) && !/\)$/.test(t)) throw {ln, msg:'Не хватает скобок: команда пишется так - forward(3)'};
       else throw {ln, msg:`Неизвестная команда: ${t}`};
     }
     return out;
   }
-  const prog=block(0); return prog;
+  return block(0);
 }
-function flatten(prog, out=[]){ for(const c of prog){ if(c.op==='for'){ for(let k=0;k<c.n;k++) flatten(c.body,out); if(out.length>2000) throw {ln:c.ln, msg:'Слишком много шагов'}; } else out.push(c); } return out; }
-const SC=28, OX=280, OY=360;   // 1 м = 28 px, старт внизу по центру
+function stripComment(s){ let q=null; for(let i=0;i<s.length;i++){ const c=s[i]; if(q){ if(c===q) q=null; } else if(c==='"'||c==="'") q=c; else if(c==='#') return s.slice(0,i); } return s; }
+function splitArgs(a){ const out=[]; let cur='', q=null, d=0; for(const c of a){ if(q){ cur+=c; if(c===q) q=null; continue; } if(c==='"'||c==="'"){ q=c; cur+=c; continue; } if(c==='(') d++; if(c===')') d--; if(c===','&&!d){ out.push(cur); cur=''; continue; } cur+=c; } if(cur.trim()) out.push(cur); return out.map(x=>x.trim()); }
+/* превращаем программу в список шагов (переменные вычисляются по ходу) */
+function flatten(prog){
+  const env={}, out=[], info={loop:false, nested:false, useVar:false};
+  const loopVars=new Set();
+  function run(list, depth){
+    for(const c of list){
+      if(out.length>3000) throw {ln:c.ln, msg:'Слишком много шагов - проверь числа в range()'};
+      if(c.op==='for'){ info.loop=true; if(depth>0) info.nested=true; const n=Math.round(evalExpr(c.n,env,c.ln)); if(n<0||n>200) throw {ln:c.ln, msg:'Число повторов должно быть от 0 до 200'};
+        loopVars.add(c.v); for(let k=0;k<n;k++){ env[c.v]=k; run(c.body, depth+1); } }
+      else if(c.op==='set'){ env[c.name]=evalExpr(c.e,env,c.ln); out.push({op:'set', ln:c.ln, name:c.name, v:env[c.name]}); }
+      else if(c.op==='print'){ const txt=splitArgs(c.a).map(p=>/^(["']).*\1$/.test(p)?p.slice(1,-1):String(+evalExpr(p,env,c.ln).toFixed(2))).join(' '); out.push({op:'print', ln:c.ln, txt}); }
+      else { if(c.a && [...loopVars].some(v=>new RegExp(`(^|[^A-Za-zА-Яа-яЁё0-9_])${v}([^A-Za-zА-Яа-яЁё0-9_]|$)`).test(c.a))) info.useVar=true;
+        const v=c.a===null?null:evalExpr(c.a,env,c.ln); if(['takeoff','land','photo'].includes(c.op)&&c.a) throw {ln:c.ln, msg:`${c.op}() пишется с пустыми скобками`};
+        out.push({op:c.op, v, ln:c.ln, a:c.a}); }
+    }
+  }
+  run(prog,0); return {steps:out, info};
+}
+/* пояснение к строке кода - простым языком */
+const fmtN=v=>String(Math.round(v*100)/100);
+function explainLine(raw){
+  const t=stripComment(raw).trim(), cm=raw.trim().startsWith('#');
+  if(!raw.trim()) return null;
+  if(cm) return {k:'cm', e:'Комментарий - заметка для человека. Дрон эту строку пропускает.'};
+  let m;
+  const num=a=>/^-?\d+(\.\d+)?$/.test(a||'');
+  if(m=t.match(new RegExp(`^for\\s+(${ID_RE})\\s+in\\s+range\\((.+)\\)\\s*(:?)$`))) return m[3]?{e:`🔁 Цикл: повторить ${num(m[2])?m[2]+' '+plural(+m[2],'раз','раза','раз'):'"'+m[2]+'" раз'} всё, что ниже с отступом. <b>${esc(m[1])}</b> - счётчик повторов: 0, 1, 2...`}:{k:'bad', e:'❗ Не хватает двоеточия ":" в конце строки с for.'};
+  if(/^for\b/.test(t)) return {k:'bad', e:'❗ Цикл записан неправильно. Пример: for i in range(4):'};
+  if(m=t.match(/^print\((.*)\)$/)) return {e:'🖨 Вывести сообщение в окно результата - так программа "говорит" с нами.'};
+  if(m=t.match(/^(\w+)\((.*)\)$/)){ const a=m[2].trim(), d=num(a)?fmtN(+a):a?`(${a})`:'';
+    switch(m[1]){
+      case 'takeoff': return {e:'🛫 Взлёт: моторы раскручиваются, дрон поднимается в воздух.'};
+      case 'land': return {e:'🛬 Посадка: дрон плавно снижается и выключает моторы.'};
+      case 'photo': return {e:'📸 Снимок камерой. На карте появится жёлтая рамка - это кадр.'};
+      case 'forward': return {e:`⬆ Лететь вперёд${d?' на '+d+' м':''} - туда, куда смотрит нос дрона.${!num(a)&&a?' Число вычисляется на каждом шаге.':''}`};
+      case 'back': return {e:`⬇ Лететь назад${d?' на '+d+' м':''}, не разворачиваясь.`};
+      case 'left': return {e:`⬅ Сместиться влево${d?' на '+d+' м':''} (боком, нос смотрит туда же).`};
+      case 'right': return {e:`➡ Сместиться вправо${d?' на '+d+' м':''} (боком, нос смотрит туда же).`};
+      case 'turn': { const v=num(a)?+a:null; return {e:`↻ Повернуться${d?' на '+d+'°':' на 90°'}${v!==null?(v<0?' против часовой (влево)':' по часовой (вправо)'):''}. Дрон висит на месте - меняется только направление.`}; }
+      case 'up': case 'down': return {e:m[1]==='up'?'⤴ Подняться выше.':'⤵ Опуститься ниже.'};
+    }
+  }
+  if(m=t.match(new RegExp(`^(${ID_RE})\\s*=\\s*(.+)$`))) return {e:`📦 Переменная <b>${esc(m[1])}</b>: запоминаем ${num(m[2])?'число '+m[2]:'значение '+esc(m[2])}. Дальше можно писать ${esc(m[1])} вместо числа.`};
+  if(/^(takeoff|land|photo|forward|back|left|right|turn)\b/.test(t)) return {k:'bad', e:'❗ Команде не хватает скобок. Правильно: forward(3)'};
+  return {k:'bad', e:'❓ Не понимаю эту строку - проверь написание (смотри "Какие команды понимает дрон").'};
+}
+let explOn=true, curLine=0;
+function renderExpl(){
+  const box=$('#expl'); if(!box) return; box.classList.toggle('off',!explOn); if(!explOn) return;
+  const lines=$('#src').value.split('\n');
+  box.innerHTML=lines.map((l,i)=>{ const x=explainLine(l); if(!x) return ''; return `<div class="el ${x.k||''} ${curLine===i+1?'cur':''}" data-ln="${i+1}"><span class="n">${i+1}</span><code>${esc(l.replace(/^\s+/,m=>'·'.repeat(m.length)))}</code><span>${x.e}</span></div>`; }).join('') || '<div class="el"><span></span><span>Напиши программу - здесь появятся пояснения.</span></div>';
+}
+function markLine(ln){ curLine=ln; document.querySelectorAll('#expl .el').forEach(e=>e.classList.toggle('cur',+e.dataset.ln===ln)); const c=document.querySelector(`#expl .el[data-ln="${ln}"]`); if(c){ const b=$('#expl'); const top=c.offsetTop-b.offsetTop; if(top<b.scrollTop||top>b.scrollTop+b.clientHeight-40) b.scrollTop=top-60; } }
+
+/* --- поле, телеметрия и анимация --- */
+const SC=28, OX=280, OY=330;   // 1 м = 28 px, площадка H
+let tele={x:0,y:0,a:0,ph:0,bat:100,air:false};
+function renderTele(){ const t=tele, head=((Math.round(t.a)%360)+360)%360;
+  $('#tele').innerHTML=`<span>📍 X ${fmtN(t.x)} м · Y ${fmtN(t.y)} м</span><span>🧭 ${head}°</span><span>📸 ${t.ph}</span><span class="${t.bat<25?'lowb':''}">🔋 ${Math.max(0,Math.round(t.bat))}%</span><span>${t.air?'🟢 в воздухе':'⚪ на земле'}</span>`; }
 function drawSim(trail, st, photos=[]){
   const c=$('#sim'), g=c.getContext('2d'); g.clearRect(0,0,c.width,c.height);
   g.fillStyle='#10301a'; g.fillRect(0,0,c.width,c.height);
   for(let y=10;y<c.height;y+=22){ g.fillStyle='rgba(74,222,128,.16)'; g.fillRect(0,y,c.width,9); }
   g.strokeStyle='rgba(255,255,255,.06)'; g.lineWidth=1; for(let x=0;x<c.width;x+=SC){ g.beginPath(); g.moveTo(x,0); g.lineTo(x,c.height); g.stroke(); } for(let y=0;y<c.height;y+=SC){ g.beginPath(); g.moveTo(0,y); g.lineTo(c.width,y); g.stroke(); }
-  g.fillStyle='rgba(250,204,21,.9)'; g.beginPath(); g.arc(OX,OY,10,0,7); g.fill(); g.fillStyle='#10301a'; g.font='bold 11px Manrope'; g.textAlign='center'; g.fillText('H',OX,OY+4);
+  g.fillStyle='rgba(255,255,255,.35)'; g.font='10px Manrope'; g.textAlign='left'; g.fillText('1 клетка = 1 м', 8, c.height-8);
+  g.fillStyle='rgba(250,204,21,.9)'; g.beginPath(); g.arc(OX,OY,11,0,7); g.fill(); g.fillStyle='#10301a'; g.font='bold 12px Manrope'; g.textAlign='center'; g.fillText('H',OX,OY+4);
   if(trail.length>1){ g.strokeStyle='#38bdf8'; g.lineWidth=3; g.setLineDash([7,6]); g.beginPath(); trail.forEach((p,i)=>i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y)); g.stroke(); g.setLineDash([]); }
-  photos.forEach(p=>{ g.strokeStyle='#fde047'; g.lineWidth=2; g.strokeRect(p.x-14,p.y-14,28,28); g.fillStyle='rgba(253,224,71,.18)'; g.fillRect(p.x-14,p.y-14,28,28); });
+  photos.forEach((p,i)=>{ g.strokeStyle='#fde047'; g.lineWidth=2; g.strokeRect(p.x-14,p.y-14,28,28); g.fillStyle='rgba(253,224,71,.18)'; g.fillRect(p.x-14,p.y-14,28,28); g.fillStyle='#fde047'; g.font='bold 10px Manrope'; g.fillText(String(i+1),p.x,p.y+4); });
   if(st){ g.save(); g.translate(st.x,st.y); g.rotate(st.a*Math.PI/180); const s=st.z>0?1.15:0.9;
+    if(st.z>0){ g.fillStyle='rgba(0,0,0,.25)'; g.beginPath(); g.ellipse(6,8,16,12,0,0,7); g.fill(); }
     g.scale(s,s); g.strokeStyle='#fff'; g.lineWidth=4; g.beginPath(); g.moveTo(-12,-12); g.lineTo(12,12); g.moveTo(12,-12); g.lineTo(-12,12); g.stroke();
     [[-12,-12],[12,-12],[-12,12],[12,12]].forEach(([x,y])=>{ g.beginPath(); g.arc(x,y,7,0,7); g.fillStyle='rgba(255,255,255,.25)'; g.fill(); g.strokeStyle='#fff'; g.lineWidth=1.5; g.stroke(); });
-    g.fillStyle='#fff'; g.fillRect(-6,-6,12,12); g.fillStyle='#ef4444'; g.beginPath(); g.moveTo(0,-15); g.lineTo(-4,-8); g.lineTo(4,-8); g.fill(); g.restore(); }
+    g.fillStyle='#fff'; g.fillRect(-6,-6,12,12); g.fillStyle='#ef4444'; g.beginPath(); g.moveTo(0,-16); g.lineTo(-5,-8); g.lineTo(5,-8); g.fill(); g.restore(); }
 }
-async function runSim(){
-  const out=$('#simOut'); out.className='out'; simStop=false;
-  let steps; try{ steps=flatten(parse($('#src').value)); }catch(e){ out.className='out err'; out.textContent=`Ошибка в строке ${e.ln}: ${e.msg}`; return; }
-  const st={x:OX,y:OY,a:0,z:0}, trail=[{x:OX,y:OY}], photos=[]; let log=[], dist=0;
+let simStop=false, simRunning=false, curMission=null;
+async function runSim(ev){
+  if(simRunning) return; const out=$('#simOut'); out.className='out'; simStop=false;
+  let F; try{ F=flatten(parse($('#src').value)); }catch(e){ out.className='out err'; out.textContent=`Ошибка в строке ${e.ln}: ${e.msg}`; markLine(e.ln); $('#nowStep').innerHTML=`🐞 Python остановился на строке <b>${e.ln}</b>. Это нормально - так программисты и находят ошибки.`; return; }
+  const steps=F.steps, src=$('#src').value.split('\n');
+  const st={x:OX,y:OY,a:0,z:0}, trail=[{x:OX,y:OY}], photos=[], prints=[]; let dist=0, fwd=0, turns=0;
+  tele={x:0,y:0,a:0,ph:0,bat:100,air:false}; renderTele();
   const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  const upd=()=>{ tele.x=(st.x-OX)/SC; tele.y=(OY-st.y)/SC; tele.a=st.a; tele.ph=photos.length; tele.air=st.z>0; renderTele(); };
+  const drain=d=>{ tele.bat-=d; if(tele.bat<=0){ tele.bat=0; renderTele(); throw {ln:curLine, msg:'🔋 Батарея разряжена - дрон аварийно сел. Сократи маршрут.'}; } };
   const anim=async(to,ms)=>{ const fr={...st}, t0=performance.now(); while(true){ if(simStop) throw 'stop'; const p=Math.min(1,(performance.now()-t0)/ms), e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
-      st.x=fr.x+(to.x-fr.x)*e; st.y=fr.y+(to.y-fr.y)*e; st.a=fr.a+(to.a-fr.a)*e; st.z=fr.z+(to.z-fr.z)*e; trail[trail.length-1]={x:st.x,y:st.y}; drawSim(trail,st,photos); if(p>=1) break; await new Promise(r=>requestAnimationFrame(r)); } };
+      st.x=fr.x+(to.x-fr.x)*e; st.y=fr.y+(to.y-fr.y)*e; st.a=fr.a+(to.a-fr.a)*e; st.z=fr.z+(to.z-fr.z)*e; trail[trail.length-1]={x:st.x,y:st.y}; drawSim(trail,st,photos); upd(); if(p>=1) break; await new Promise(r=>requestAnimationFrame(r)); } };
+  const say=(c,extra)=>{ markLine(c.ln); const x=explainLine(src[c.ln-1]||''); $('#nowStep').innerHTML=`Строка <b>${c.ln}</b>: <code>${esc((src[c.ln-1]||'').trim())}</code><br>${x?x.e:''}${extra||''}`; };
+  simRunning=true; $('#runBtn').disabled=true; if(innerWidth<900) $('#sim').scrollIntoView({behavior:'smooth',block:'center'});
   try{
     for(const c of steps){
-      if(c.op!=='takeoff' && st.z===0 && c.op!=='land'){ throw {ln:c.ln, msg:'Дрон ещё на земле - сначала takeoff()'}; }
-      if(c.op==='takeoff'){ await anim({...st,z:1},500); log.push('взлёт'); continue; }
-      if(c.op==='land'){ await anim({...st,z:0},500); log.push('посадка'); continue; }
-      if(c.op==='photo'){ photos.push({x:st.x,y:st.y}); drawSim(trail,st,photos); await wait(250); log.push('фото'); continue; }
-      if(c.op==='turn'){ await anim({...st,a:st.a+(c.v??90)},Math.min(700,Math.abs(c.v??90)*6)); continue; }
+      say(c, c.v!==null&&c.v!==undefined&&c.a&&!/^-?\d+(\.\d+)?$/.test(c.a)?` <b>Сейчас (${esc(c.a)}) = ${fmtN(c.v)}</b>`:'');
+      if(c.op==='set'){ await wait(200); continue; }
+      if(c.op==='print'){ prints.push(c.txt); out.textContent='💬 '+prints.join('\n💬 '); await wait(300); continue; }
+      if(c.op!=='takeoff' && st.z===0){ throw {ln:c.ln, msg:c.op==='land'?'Дрон и так на земле':'Дрон ещё на земле - сначала takeoff()'}; }
+      if(c.op==='takeoff'){ if(st.z>0) throw {ln:c.ln, msg:'Дрон уже в воздухе'}; drain(3); await anim({...st,z:1},500); continue; }
+      if(c.op==='land'){ await anim({...st,z:0},500); continue; }
+      if(c.op==='photo'){ drain(.4); photos.push({x:st.x,y:st.y}); drawSim(trail,st,photos); upd(); await wait(260); continue; }
+      if(c.op==='turn'){ const v=c.v??90; turns+=v; drain(Math.abs(v)/300); await anim({...st,a:st.a+v},Math.min(700,Math.abs(v)*5+120)); continue; }
       if(c.op==='up'||c.op==='down'){ await wait(200); continue; }
-      const d=(c.v??1), ang={forward:0,back:180,right:90,left:-90}[c.op], rad=(st.a+ang)*Math.PI/180;
+      const d=(c.v??1); if(d<0) throw {ln:c.ln, msg:'Расстояние не может быть отрицательным - используй back() вместо forward()'};
+      const ang={forward:0,back:180,right:90,left:-90}[c.op], rad=(st.a+ang)*Math.PI/180;
       const to={...st, x:st.x+Math.sin(rad)*d*SC, y:st.y-Math.cos(rad)*d*SC};
-      if(to.x<10||to.x>550||to.y<10||to.y>410){ throw {ln:c.ln, msg:'Дрон вылетает за границу поля! Уменьшите расстояние.'}; }
-      trail.push({x:st.x,y:st.y}); await anim(to, 250+d*170); dist+=d;
+      if(to.x<10||to.x>550||to.y<10||to.y>410){ throw {ln:c.ln, msg:'Дрон вылетает за границу поля! Уменьши расстояние.'}; }
+      drain(d*.6); trail.push({x:st.x,y:st.y}); await anim(to, 220+d*150); dist+=d; if(c.op==='forward') fwd+=d;
     }
-    const landed=st.z===0;
-    out.textContent=`✓ Программа выполнена: ${steps.length} команд, пролёт ${dist.toFixed(1)} м, фото: ${photos.length}.${landed?'':' Внимание: дрон не приземлился - добавьте land().'}`;
-  }catch(e){ if(e==='stop'){ out.textContent='Остановлено.'; return; } out.className='out err'; out.textContent=`Ошибка в строке ${e.ln}: ${e.msg}`; }
+    const home=Math.hypot(st.x-OX,st.y-OY)<SC*.35, landed=st.z===0 && steps.some(s=>s.op==='takeoff');
+    const lines=src.filter(l=>stripComment(l).trim()).length;
+    const R={photos:photos.length, dist, fwd, landed, home, lines, loop:F.info.loop, nested:F.info.nested, useVar:F.info.useVar, bat:tele.bat, turns};
+    out.textContent=(prints.length?'💬 '+prints.join('\n💬 ')+'\n':'')+`✓ Готово: ${steps.length} ${plural(steps.length,'шаг','шага','шагов')}, пролёт ${fmtN(dist)} м, фото: ${photos.length}, заряд ${Math.round(tele.bat)}%.${landed?home?' Посадка точно на H 🎯':'':' Внимание: дрон не приземлился - добавь land().'}`;
+    $('#nowStep').innerHTML='✅ Программа выполнена до конца.'; markLine(0);
+    addXP('run',10,ev);
+    checkMissions(R, ev);
+  }catch(e){ if(e==='stop'){ out.textContent='Остановлено.'; $('#nowStep').textContent='Остановлено.'; }
+    else { out.className='out err'; out.textContent=`Ошибка в строке ${e.ln}: ${e.msg}`; markLine(e.ln); } }
+  finally{ simRunning=false; $('#runBtn').disabled=false; }
+}
+
+/* --- миссии --- */
+const MISSIONS=[
+  {id:'m1', e:'🛫', t:'Первый полёт', lv:'легко', d:'Взлети, пролети вперёд хотя бы 3 м и приземлись.', start:'takeoff()\n# напиши здесь команду полёта вперёд\nland()', ok:R=>R.landed&&R.fwd>=3},
+  {id:'m2', e:'🏠', t:'Вернись на базу', lv:'легко', d:'Облети любую фигуру (не меньше 4 м пути) и сядь точно на площадку H.', start:'takeoff()\n\nland()', ok:R=>R.landed&&R.home&&R.dist>=4},
+  {id:'m3', e:'📸', t:'Фотограф', lv:'средне', d:'Сделай 6 фото, используя цикл for. Совет: photo() внутри цикла.', start:'takeoff()\nfor i in range(3):\n    forward(2)\n    photo()\nland()', ok:R=>R.landed&&R.photos>=6&&R.loop},
+  {id:'m4', e:'✂', t:'Коротко и ясно', lv:'средне', d:'Облети квадрат и вернись на H. Программа - не длиннее 5 строк (комментарии не считаются).', start:'takeoff()\nforward(3)\nturn(90)\nforward(3)\nturn(90)\nforward(3)\nturn(90)\nforward(3)\nturn(90)\nland()', ok:R=>R.landed&&R.home&&R.lines<=5&&R.loop},
+  {id:'m5', e:'🌀', t:'Спираль', lv:'средне', d:'Пусть дрон с каждым повтором летит дальше: используй счётчик цикла внутри команды, например forward(i + 1).', start:'takeoff()\nfor i in range(5):\n    forward(2)\n    turn(90)\nland()', ok:R=>R.landed&&R.useVar},
+  {id:'m6', e:'🌾', t:'Агроскан', lv:'сложно', d:'Сними поле сеткой: минимум 9 фото с помощью цикла внутри цикла, и вернись на H.', start:'takeoff()\nfor ряд in range(3):\n    # вложи сюда второй цикл со снимками\n    right(3)\nland()', ok:R=>R.landed&&R.home&&R.nested&&R.photos>=9},
+  {id:'m7', e:'🔋', t:'Береги заряд', lv:'сложно', d:'Сделай 8 фото и приземлись, сохранив больше 70% батареи.', start:'takeoff()\n\nland()', ok:R=>R.landed&&R.photos>=8&&R.bat>70}
+];
+function renderMissions(){
+  $('#missionsL').innerHTML=MISSIONS.map(m=>{ const done=!!P['x:'+m.id]; return `<div class="mis ${done?'done':''} ${curMission===m.id?'cur':''}" data-id="${m.id}">
+    <div class="mt"><span class="mi">${m.e}</span><div><span class="lv">${m.lv}</span><h4>${m.t}</h4></div><span class="st" style="margin-left:auto">⭐</span></div>
+    <p>${m.d}</p><div class="row" style="margin:0"><button class="ibtn sm ${done?'':'pri'}">${done?'Пройти ещё раз':curMission===m.id?'Миссия активна ✓':'Начать миссию'}</button><small style="color:var(--dim)">+30 XP</small></div></div>`; }).join('');
+  document.querySelectorAll('.mis button').forEach(b=>b.onclick=()=>{ const m=MISSIONS.find(x=>x.id===b.closest('.mis').dataset.id); curMission=m.id; $('#src').value=m.start; renderExpl();
+    $('#pDesc').innerHTML=`🎯 <b>Миссия "${m.t}":</b> ${m.d}`; renderMissions(); document.getElementById('simT').scrollIntoView({behavior:'smooth'}); });
+}
+function checkMissions(R, ev){
+  const got=MISSIONS.filter(m=>m.id===curMission&&m.ok(R)&&!P['x:'+m.id]);   // засчитываем только начатую миссию
+  got.forEach((m,i)=>setTimeout(()=>{ addXP(m.id,30,ev); toast(`⭐ Миссия "${m.t}" выполнена!`); renderMissions(); },500+i*900));
+  if(curMission && !got.some(m=>m.id===curMission) && !P['x:'+curMission]){ const m=MISSIONS.find(x=>x.id===curMission); setTimeout(()=>toast(`Миссия "${m.t}" пока не выполнена - перечитай условие`),400); }
+}
+
+/* --- шпаргалка --- */
+const FLIPS=[
+  {e:'🎮', t:'Команда', s:'приказ дрону', g:'#2563eb,#7c3aed', b:'Команда (в Python - функция) говорит компьютеру, что сделать. Скобки () обязательны: они значат "выполни".', c:'takeoff()\nphoto()'},
+  {e:'🔢', t:'Аргумент', s:'уточнение в скобках', g:'#0891b2,#2563eb', b:'Число в скобках уточняет команду: на сколько метров лететь или на сколько градусов повернуть.', c:'forward(3)   # 3 метра\nturn(90)     # 90 градусов'},
+  {e:'🔁', t:'Цикл for', s:'повтори N раз', g:'#16a34a,#0d9488', b:'Вместо 8 строк - 3. range(4) значит "4 раза". Программисты ленивы - и это хорошо!', c:'for i in range(4):\n    forward(2)\n    turn(90)'},
+  {e:'↔', t:'Отступ', s:'4 пробела', g:'#ca8a04,#ea580c', b:'Строки с отступом - внутри цикла. В Python отступ - часть языка: без него программа не запустится.', c:'for i in range(2):\n    photo()   # внутри\nland()        # после цикла'},
+  {e:'📦', t:'Переменная', s:'коробка с именем', g:'#db2777,#7c3aed', b:'Запоминает значение под именем. Поменял число в одном месте - оно поменялось везде.', c:'шаг = 3\nforward(шаг)\nforward(шаг * 2)'},
+  {e:'🔀', t:'Условие if', s:'если..., то...', g:'#dc2626,#ea580c', b:'Программа сама принимает решение. Так дрон возвращается домой при низком заряде.', c:'if заряд < 20:\n    land()\nelse:\n    forward(5)'},
+  {e:'📋', t:'Список', s:'много в одном', g:'#0d9488,#65a30d', b:'Хранит несколько значений по порядку. Счёт идёт с нуля: поля[0] - первый элемент.', c:'поля = ["пшеница", "рапс"]\nprint(len(поля))  # 2'},
+  {e:'💬', t:'Комментарий', s:'заметка для людей', g:'#475569,#1e293b', b:'Всё после # компьютер пропускает. Пиши комментарии - через месяц сам скажешь себе спасибо.', c:'# облёт поля, высота 10 м\ntakeoff()'},
+  {e:'🖨', t:'print()', s:'покажи на экране', g:'#7c3aed,#2563eb', b:'Выводит текст или число. Главный способ "спросить" программу, что у неё внутри.', c:'шаг = 3\nprint("Шаг:", шаг)'},
+  {e:'🐞', t:'Ошибка (баг)', s:'это нормально!', g:'#be123c,#9f1239', b:'Python пишет номер строки и что не так. Ошибаются все программисты - хорошие просто быстро находят баги.', c:'for i in range(4)   # нет ":"\n# SyntaxError'}
+];
+function renderFlips(){
+  $('#flips').innerHTML=FLIPS.map((f,i)=>`<div class="flip" data-i="${i}"><div class="fi"><div class="ff" style="background:linear-gradient(135deg,${f.g})"><span class="e">${f.e}</span><div><h4>${f.t}</h4><small>${f.s}</small></div><small style="opacity:.75">нажми, чтобы перевернуть ↻</small></div>
+    <div class="fb"><b>${f.t}</b><span>${f.b}</span><pre>${esc(f.c)}</pre></div></div></div>`).join('');
+  document.querySelectorAll('.flip').forEach(e=>e.onclick=ev=>{ e.classList.toggle('on'); if(e.classList.contains('on')) addXP('cf'+e.dataset.i,2,ev); });
+}
+
+/* --- викторина по коду --- */
+const PYQ=[
+  {q:'Сколько фото сделает дрон?', c:'for i in range(3):\n    photo()', o:['1','3','4','0'], r:1, e:'range(3) - это три повтора (0, 1, 2), значит, три фото.'},
+  {q:'Что нарисует дрон?', c:'for i in range(4):\n    forward(2)\n    turn(90)', o:['Линию','Квадрат и вернётся на старт','Треугольник','Круг'], r:1, e:'4 стороны по 2 м и 4 поворота по 90° - квадрат. 4 x 90° = 360°, дрон смотрит туда же, куда в начале.'},
+  {q:'А эта программа?', c:'for i in range(3):\n    forward(4)\n    turn(120)', o:['Квадрат','Треугольник','Звезду','Шестиугольник'], r:1, e:'3 стороны и поворот 120°. 3 x 120° = 360° - замкнутый треугольник.'},
+  {q:'Что выведет код?', c:'print(2 + 3 * 4)', o:['20','14','234','9'], r:1, e:'Сначала умножение: 3 * 4 = 12, потом 2 + 12 = 14. Как в математике.'},
+  {q:'Что выведет код?', c:'n = 5\nn = n + 1\nprint(n)', o:['5','6','n + 1','Ошибку'], r:1, e:'Взяли 5, прибавили 1 и положили обратно в n. Теперь там 6.'},
+  {q:'Что выведет код?', c:'for i in range(3):\n    print(i)', o:['1 2 3','0 1 2','3 3 3','0 1 2 3'], r:1, e:'Счёт в Python начинается с нуля. range(3) - это 0, 1, 2.'},
+  {q:'Что случится?', c:'for i in range(4)\n    forward(2)', o:['Дрон пролетит 8 м','Ошибка: нет двоеточия','Дрон пролетит 2 м','Ничего'], r:1, e:'После for ... in range(...) обязательно двоеточие. Без него - SyntaxError.'},
+  {q:'Что выведет код?', c:'поля = ["пшеница", "ячмень", "рапс"]\nprint(len(поля))', o:['3','2','пшеница','ячмень'], r:0, e:'len() считает, сколько элементов в списке. Их три.'},
+  {q:'Что выведет код?', c:'заряд = 15\nif заряд < 20:\n    print("Домой!")\nelse:\n    print("Летим дальше")', o:['Домой!','Летим дальше','15','Ничего'], r:0, e:'15 меньше 20 - условие верно, выполняется первая ветка. Так дрон бережёт батарею.'},
+  {q:'Сколько метров пролетит дрон?', c:'for i in range(3):\n    forward(i + 1)', o:['3 м','6 м','9 м','4 м'], r:1, e:'i = 0, 1, 2, значит, forward(1), forward(2), forward(3). 1 + 2 + 3 = 6 м.'}
+];
+let pqI=0, pqRes=[];
+function renderPyQuiz(){
+  const box=$('#pyQuiz'); box.classList.add('qz');
+  if(pqI>=PYQ.length){ const sc=pqRes.filter(Boolean).length; box.innerHTML=`<div class="fin"><div class="sc" style="color:${sc>=8?'var(--ok)':sc>=5?'var(--warn)':'var(--bad)'}">${sc} / ${PYQ.length}</div><p>${sc>=8?'Мощно! Ты мыслишь как программист 🧠':sc>=5?'Хорошо! Загляни в шпаргалку и попробуй ещё раз.':'Начало положено! Переверни карточки шпаргалки - и снова в бой.'}</p><button class="ibtn pri" id="pqAgain">Пройти ещё раз</button></div>`;
+    $('#pqAgain').onclick=()=>{ pqI=0; pqRes=[]; renderPyQuiz(); }; return; }
+  const Q=PYQ[pqI];
+  box.innerHTML=`<div class="qtop"><b>Вопрос ${pqI+1} из ${PYQ.length}</b><div class="dots">${PYQ.map((_,k)=>`<i class="${k<pqRes.length?(pqRes[k]?'ok':'no'):k===pqI?'cur':''}"></i>`).join('')}</div></div>
+    <div class="qq">${esc(Q.q)}</div><pre>${esc(Q.c)}</pre><div class="qo">${Q.o.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div id="pqE"></div>`;
+  box.querySelectorAll('.qo button').forEach(b=>b.onclick=ev=>{ const k=+b.dataset.k, ok=k===Q.r; pqRes.push(ok);
+    box.querySelectorAll('.qo button').forEach(x=>{ x.disabled=true; if(+x.dataset.k===Q.r) x.classList.add('right'); }); if(!ok) b.classList.add('wrong');
+    if(ok) addXP('pq'+pqI,5,ev);
+    $('#pqE').innerHTML=`<div class="qe"><b>${ok?'✅ Верно!':'❌ Не совсем.'}</b> ${esc(Q.e)}<div class="row" style="margin-bottom:0"><button class="ibtn pri sm" id="pqNext">${pqI+1<PYQ.length?'Следующий →':'Результат'}</button></div></div>`;
+    $('#pqNext').onclick=()=>{ pqI++; renderPyQuiz(); }; });
+}
+
+/* --- где живёт Python --- */
+const LIFE=[
+  {e:'🤖', t:'Нейросети', d:'Большинство моделей ИИ создают и обучают на Python.', g:'#7c3aed,#db2777'},
+  {e:'🛰', t:'Дроны и спутники', d:'Обработка снимков полей, планирование маршрутов, наземные станции.', g:'#0f766e,#0ea5e9'},
+  {e:'🌾', t:'Умное сельское хозяйство', d:'Прогноз урожая, карты полива и удобрений, анализ почвы.', g:'#15803d,#84cc16'},
+  {e:'🎮', t:'Игры и боты', d:'Игры на Pygame, боты для Telegram и VK - первые проекты многих ребят.', g:'#ea580c,#f59e0b'},
+  {e:'📊', t:'Данные и наука', d:'Графики, таблицы, расчёты - на Python считают учёные по всему миру.', g:'#1d4ed8,#6366f1'}
+];
+
+let pyInit=false;
+function initPy(){
+  if(pyInit) return; pyInit=true;
+  $('#show').innerHTML=SHOW.map((s,k)=>`<div class="sc2" data-k="${k}" style="background:linear-gradient(135deg,${s.g})"><span class="big">${ic(s.i,110)}</span>${ic(s.i,26)}<h4>${s.t}</h4><p>${s.d}</p></div>`).join('');
+  document.querySelectorAll('.sc2').forEach(e=>e.onclick=()=>{ const s=SHOW[+e.dataset.k]; if(s.go) document.getElementById(s.go).scrollIntoView({behavior:'smooth',block:'start'}); else if(s.mod) openMod(s.mod); else if(s.view) document.querySelector(`#nav button[data-v="${s.view}"]`).click(); });
+  reveal('.sc2');
+  const names=Object.keys(PRESETS), pick=v=>{ curMission=null; $('#src').value=PRESETS[v].c; $('#pDesc').innerHTML='💡 '+PRESETS[v].d; drawSim([], {x:OX,y:OY,a:0,z:0}); tele={x:0,y:0,a:0,ph:0,bat:100,air:false}; renderTele(); curLine=0; renderExpl(); $('#simOut').className='out'; $('#simOut').textContent='Программа загружена. Нажми "Запустить".'; $('#nowStep').textContent='Здесь будет видно, какую строку дрон выполняет прямо сейчас.'; renderMissions(); };
+  fancySelect($('#presetSel'), names.map(n=>({v:n,t:n})), names[1], pick); pick(names[1]);
+  let tm; $('#src').oninput=()=>{ clearTimeout(tm); tm=setTimeout(renderExpl,250); };
+  $('#src').onkeydown=e=>{ if(e.key==='Tab'){ e.preventDefault(); const t=e.target, s=t.selectionStart; t.value=t.value.slice(0,s)+'    '+t.value.slice(t.selectionEnd); t.selectionStart=t.selectionEnd=s+4; renderExpl(); } };
+  $('#runBtn').onclick=runSim; $('#stopBtn').onclick=()=>simStop=true;
+  $('#explBtn').onclick=()=>{ explOn=!explOn; $('#explBtn').textContent='🧠 Пояснения: '+(explOn?'вкл':'выкл'); renderExpl(); };
+  renderMissions(); renderFlips(); renderPyQuiz();
+  $('#life').innerHTML=LIFE.map(l=>`<div style="background:linear-gradient(135deg,${l.g})"><span class="e">${l.e}</span><h4>${l.t}</h4><p>${l.d}</p></div>`).join('');
+  reveal('.mis'); reveal('.flip'); reveal('.life>div');
+  initField(); initPoll('#pollPy');
 }
 /* поле и индекс зелени */
 let fieldImg=null, showMask=false;
@@ -698,8 +1151,49 @@ function calcField(){
 }
 
 /* ============================================================
+   ОПРОСЫ (анонимно, через сервер школы)
+   ============================================================ */
+const POLL_OPTS={ ai_use:['Учёба','Творчество (картинки, музыка)','Советы и общение','Программирование','Пока не пользуюсь'], py_level:['Уже пишу код','Понимаю основы','Интересно, но пока сложно','Впервые слышу'] };
+function initPoll(sel){
+  const box=$(sel); if(!box) return; const poll=box.dataset.poll, opts=POLL_OPTS[poll];
+  let mine=null; try{ mine=localStorage.getItem('agro_poll_'+poll); }catch(e){}
+  const draw=(res)=>{ const tot=res?Object.values(res).reduce((a,b)=>a+b,0):0;
+    box.innerHTML=`<div class="pq">${esc(box.dataset.q)}</div><div class="po">${opts.map(o=>{ const n=res?res[o]||0:0, pc=tot?Math.round(n/tot*100):0;
+      return `<button data-o="${esc(o)}" ${mine?'disabled':''} class="${mine===o?'me':''}"><i class="bf" style="width:${res?pc:0}%"></i><span>${esc(o)}${mine===o?' ✓':''}</span>${res?`<span class="pc">${pc}%</span>`:''}</button>`; }).join('')}</div>
+      <small>${res?`Проголосовали: ${tot}. ${mine?'Спасибо за ответ!':''}`:mine?'Загружаю результаты…':'Выбери вариант - и увидишь, что ответили другие.'}</small>`;
+    box.querySelectorAll('.po button').forEach(b=>b.onclick=async ev=>{ if(mine) return; mine=b.dataset.o; try{ localStorage.setItem('agro_poll_'+poll,mine); }catch(e){} addXP('poll_'+poll,10,ev); draw(null);
+      try{ const j=await (await fetch(API,{method:'POST',body:JSON.stringify({op:'vote',poll,option:mine})})).json(); if(j.ok) draw(j.results); else box.querySelector('small').textContent='Не удалось отправить: '+(j.error||''); }catch(e){ box.querySelector('small').textContent='Нет связи с сервером - ответ сохранён только у тебя.'; } }); };
+  draw(null);
+  if(mine && API) fetch(API,{method:'POST',body:JSON.stringify({op:'poll',poll})}).then(r=>r.json()).then(j=>{ if(j.ok) draw(j.results); }).catch(()=>{});
+}
+
+/* ============================================================
    ПРОМПТ-ИНЖИНИРИНГ
    ============================================================ */
+const STEPS4=[
+  {e:'📚', t:'Прочитала море текстов', d:'Книги, сайты, статьи. Она запомнила, какие слова обычно стоят рядом и как строятся ответы.'},
+  {e:'🎯', t:'Угадывает следующее слово', d:'Отвечая, она каждый раз выбирает самое подходящее продолжение - слово за словом. Попробуй сам ниже.'},
+  {e:'🤯', t:'Может ошибаться уверенно', d:'Если данных мало, она "досочиняет" правдоподобный, но неверный ответ. Это называют галлюцинацией.'},
+  {e:'🧑‍🔬', t:'Решает человек', d:'Нейросеть - помощник, а не судья. Проверяй факты и думай своей головой.'}
+];
+const NEXTW=[
+  {s:'Дрон взлетел и полетел над', o:[['полем',58],['лесом',17],['рекой',12],['школой',9],['Луной',1]]},
+  {s:'Чтобы понять, здоровы ли посевы, агроном смотрит на цвет', o:[['листьев',61],['поля',22],['трактора',4],['неба',3],['ботинок',1]]},
+  {s:'Python - это язык', o:[['программирования',83],['общения',5],['змей',4],['жестов',2],['дронов',1]]}
+];
+let nwI=0;
+function renderNextWord(){
+  const N=NEXTW[nwI], box=$('#nextWord');
+  box.innerHTML=`<b>🎲 Игра "Будь нейросетью"</b><p style="color:var(--dim);font-size:14px">Какое слово нейросеть поставит следующим? Выбери - и увидишь, как она "взвешивает" варианты.</p>
+    <div class="sent">${esc(N.s)} <span class="gap">?</span></div><div class="opts">${N.o.map(([w],k)=>`<button data-k="${k}"><i class="bf"></i><span>${esc(w)}</span></button>`).join('')}</div><div id="nwE"></div>`;
+  box.querySelectorAll('.opts button').forEach(b=>b.onclick=ev=>{
+    box.querySelectorAll('.opts button').forEach((x,k)=>{ x.disabled=true; x.querySelector('.bf').style.width=N.o[k][1]+'%'; x.insertAdjacentHTML('beforeend',`<span class="pc">${N.o[k][1]}%</span>`); });
+    b.classList.add('pick'); box.querySelector('.gap').textContent=N.o[0][0]; addXP('nw'+nwI,5,ev);
+    $('#nwE').innerHTML=`<p style="margin-top:10px">Нейросеть чаще выберет <b>"${esc(N.o[0][0])}"</b> - так чаще пишут в текстах. Но иногда она берёт менее вероятное слово, поэтому ответы на один вопрос бывают разными. <small style="color:var(--dim)">(Проценты условные - для примера.)</small></p>
+      <div class="row"><button class="ibtn sm pri" id="nwNext">Другое предложение →</button></div>`;
+    $('#nwNext').onclick=()=>{ nwI=(nwI+1)%NEXTW.length; renderNextWord(); };
+  });
+}
 const PAIRS=[
   {bad:'Напиши код для дрона', good:`Ты - преподаватель Python для 9 класса.
 Напиши программу для учебного квадрокоптера: взлёт, облёт квадрата со стороной 2 м, посадка.
@@ -711,27 +1205,86 @@ const PAIRS=[
 Ответ - нумерованным списком, простым языком.`, why:'Нейросеть получила данные, а не догадки, и понятный формат ответа. Вывод всё равно проверяет человек.'},
   {bad:'Объясни PID', good:`Объясни, что такое PID-регулятор, девятикласснику.
 Используй пример: дрон держит высоту 1 метр, а его сдувает ветер.
-Отдельно - P, I и D, по 1-2 предложения. В конце - 2 вопроса для самопроверки.`, why:'Задан уровень, пример из жизни и структура ответа - получится готовый конспект.'}
+Отдельно - P, I и D, по 1-2 предложения. В конце - 2 вопроса для самопроверки.`, why:'Задан уровень, пример из жизни и структура ответа - получится готовый конспект.'},
+  {bad:'Нарисуй дрон', good:`Реалистичная фотография: белый учебный квадрокоптер летит низко над полем золотой пшеницы на закате.
+Вид сбоку, мягкий тёплый свет, на заднем плане - деревня.
+Формат 16:9, без текста и логотипов.`, why:'Для картинок важны детали: что, где, какой свет, ракурс и формат. Чем больше деталей - тем ближе к задумке.'},
+  {bad:'Реши мне домашку по физике', good:`Я решаю задачу: дрон летит со скоростью 5 м/с. Сколько метров он пролетит за 2 минуты?
+Не давай ответ сразу. Задай мне один наводящий вопрос,
+а потом проверь моё решение и объясни ошибку, если она есть.`, why:'ИИ как репетитор, а не "списывалка": ты сам понимаешь решение, и на контрольной это поможет.'}
 ];
 const FORM=[['Роль','кто отвечает','#16a34a'],['Задача','что сделать','#0ea5e9'],['Контекст','исходные данные','#ca8a04'],['Формат','как оформить','#7c3aed'],['Ограничения','рамки и уровень','#be123c']];
+const FIX=[
+  {p:'Ты - инженер по дронам.\nСоставь план облёта поля.\nОтвет - нумерованным списком, не больше 7 пунктов.', r:2, e:'Не хватает контекста: какое поле, какого размера, какой дрон? Без данных нейросеть напишет общие слова.'},
+  {p:'Ты - учитель биологии.\nПоле пшеницы 50 га, на снимке с дрона жёлтые пятна.\nОтветь коротким списком для 8 класса.', r:1, e:'Не хватает задачи: что сделать? Объяснить причины пятен? Составить план проверки? Нейросеть будет гадать.'},
+  {p:'Ты - преподаватель Python.\nОбъясни ученику 8 класса, как работает цикл for,\nна примере облёта поля дроном.', r:3, e:'Не хватает формата: сколько писать? Списком, таблицей, с примером кода? Без формата ответ может быть на три страницы.'},
+  {p:'По данным с дрона (поле 20 га, 3 проблемные зоны)\nсоставь отчёт для директора агрохолдинга:\nтаблица, 5 строк, деловой стиль.', r:0, e:'Не хватает роли: от чьего лица писать? "Ты - агроном-аналитик" сразу задаёт уровень и стиль.'}
+];
+let fxI=0;
+function renderFix(){
+  const F=FIX[fxI], box=$('#fixGame'); box.classList.add('fix');
+  box.innerHTML=`<div class="qtop" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><b>Раунд ${fxI+1} из ${FIX.length}</b><small style="color:var(--dim)">В промпте не хватает одного ингредиента. Какого?</small></div>
+    <div class="fp">${esc(F.p)}</div><div class="fo">${FORM.map(([t],k)=>`<button data-k="${k}">${t}</button>`).join('')}</div><div id="fxE"></div>`;
+  box.querySelectorAll('.fo button').forEach(b=>b.onclick=ev=>{ const k=+b.dataset.k, ok=k===F.r;
+    box.querySelectorAll('.fo button').forEach(x=>{ x.disabled=true; if(+x.dataset.k===F.r) x.classList.add('right'); }); if(!ok) b.classList.add('wrong');
+    if(ok) addXP('fx'+fxI,5,ev);
+    $('#fxE').innerHTML=`<p style="margin-top:12px"><b>${ok?'✅ Точно!':'❌ Не совсем.'}</b> ${esc(F.e)}</p><div class="row"><button class="ibtn sm pri" id="fxNext">${fxI+1<FIX.length?'Следующий раунд →':'Сыграть снова'}</button></div>`;
+    $('#fxNext').onclick=()=>{ fxI=(fxI+1)%FIX.length; renderFix(); }; });
+}
+const MYTHS=[
+  {s:'Нейросеть всегда говорит правду.', t:false, e:'Она может уверенно ошибаться и даже придумывать ссылки. Важные факты проверяй по надёжным источникам.'},
+  {s:'Чем точнее запрос, тем полезнее ответ.', t:true, e:'Роль, задача, данные и формат - и ответ становится в разы лучше.'},
+  {s:'ИИ понимает мир так же, как человек.', t:false, e:'У нейросети нет опыта и чувств - она находит закономерности в текстах и продолжает их.'},
+  {s:'В чат с нейросетью можно спокойно писать пароль и домашний адрес.', t:false, e:'Никогда. Переписка может храниться на серверах. Личные данные - только для тебя.'},
+  {s:'ИИ уже помогает агрономам находить больные растения по снимкам.', t:true, e:'Да! Модели анализируют фото с дронов и спутников и подсвечивают проблемные участки.'},
+  {s:'Если код написал ИИ, его не нужно проверять.', t:false, e:'ИИ часто ошибается в коде. Запусти, протестируй и разберись, как он работает.'},
+  {s:'Нейросеть можно попросить объяснить тему попроще, как для 5 класса.', t:true, e:'Это один из лучших способов учиться: проси примеры, аналогии и вопросы для самопроверки.'},
+  {s:'Картинку от ИИ всегда легко отличить от настоящего фото.', t:false, e:'Современные генераторы делают очень реалистичные изображения. Проверяй источник, прежде чем верить и пересылать.'}
+];
+let myI=0, myScore=0;
+function renderMyth(){
+  const box=$('#myths'); box.classList.add('myth');
+  if(myI>=MYTHS.length){ box.innerHTML=`<div style="text-align:center;padding:14px"><div style="font:700 44px Unbounded,sans-serif">${myScore} / ${MYTHS.length}</div><p>${myScore>=7?'Ты отлично разбираешься в ИИ! 🤖':myScore>=5?'Неплохо! Перечитай пояснения - и будет идеально.':'Хорошее начало! ИИ полон сюрпризов - попробуй ещё раз.'}</p><button class="ibtn pri" id="myAgain">Ещё раз</button></div>`; $('#myAgain').onclick=()=>{ myI=0; myScore=0; renderMyth(); }; return; }
+  const M=MYTHS[myI];
+  box.innerHTML=`<div style="display:flex;justify-content:space-between;color:var(--dim);font-weight:700;font-size:13px"><span>Утверждение ${myI+1} из ${MYTHS.length}</span><span>Верно: ${myScore}</span></div>
+    <div class="mq">"${esc(M.s)}"</div><div class="mb"><button class="t" data-v="1">Правда</button><button class="f" data-v="0">Миф</button></div><div id="myE"></div>`;
+  box.querySelectorAll('.mb button').forEach(b=>b.onclick=ev=>{ const ok=(b.dataset.v==='1')===M.t; if(ok){ myScore++; addXP('my'+myI,5,ev); }
+    box.querySelectorAll('.mb button').forEach(x=>x.disabled=true);
+    $('#myE').innerHTML=`<p style="margin-top:12px"><b>${ok?'✅ Верно!':'❌ Не угадал.'} Это ${M.t?'правда':'миф'}.</b> ${esc(M.e)}</p><div class="row"><button class="ibtn sm pri" id="myNext">${myI+1<MYTHS.length?'Дальше →':'Итог'}</button></div>`;
+    $('#myNext').onclick=()=>{ myI++; renderMyth(); }; });
+}
+const SAFE=[
+  {e:'🔒', t:'Не делись личным', d:'Пароли, адреса, телефоны и фото документов не пиши нейросети.'},
+  {e:'✅', t:'Проверяй факты', d:'Важное сверяй с учебником или надёжным сайтом. ИИ может ошибиться.'},
+  {e:'🧠', t:'Думай сам', d:'ИИ объясняет - решаешь ты. Списанный ответ не прокачает мозг.'},
+  {e:'🖼', t:'Отличай фейки', d:'Картинки, голос и видео от ИИ бывают очень реалистичными. Проверяй источник.'},
+  {e:'©', t:'Уважай авторов', d:'Чужие тексты и рисунки нельзя выдавать за свои - даже если их "переписал" ИИ.'},
+  {e:'🙋', t:'Будь честным', d:'Если в работе помогал ИИ - скажи об этом учителю. Это нормально.'}
+];
 const PB={role:['агроном-консультант','преподаватель Python','инженер по дронам','редактор отчётов'], task:['напиши программу полёта','составь план облёта поля','объясни тему простыми словами','оформи отчёт по итогам облёта'],
   fmt:['код на Python с комментариями','нумерованный список','таблица','короткий конспект'], lim:['для 9 класса','не больше 10 строк','без сложных терминов','с примером','с вопросами для самопроверки']};
 let aiInit=false, pbS={role:0,task:0,fmt:0,lim:new Set([0])};
 function initAI(){
   if(aiInit) return; aiInit=true;
+  $('#steps4').innerHTML=STEPS4.map((s,i)=>`<div><span class="sn">${i+1}</span><span class="e">${s.e}</span><h4>${s.t}</h4><p>${s.d}</p></div>`).join('');
+  renderNextWord();
   $('#formula').innerHTML=FORM.map(([t,s,c],i)=>`${i?'<b style="font-size:20px;color:var(--dim)">+</b>':''}<span class="fpart" style="background:${c}">${t}<small>${s}</small></span>`).join('');
-  $('#pairs').innerHTML=PAIRS.map(p=>`<div class="pcomp" style="margin-bottom:14px"><div class="card pbad"><h4>✗ Слабый запрос</h4><div class="ptxt">${esc(p.bad)}</div><p style="margin-top:8px;color:var(--dim);font-size:13px">Нейросеть будет угадывать, что вам нужно.</p></div>
+  $('#pairs').innerHTML=PAIRS.map(p=>`<div class="pcomp" style="margin-bottom:14px"><div class="card pbad"><h4>✗ Слабый запрос</h4><div class="ptxt">${esc(p.bad)}</div><p style="margin-top:8px;color:var(--dim);font-size:13px">Нейросеть будет угадывать, что тебе нужно.</p></div>
     <div class="card pgood"><h4>✓ Хороший запрос</h4><div class="ptxt">${esc(p.good)}</div><p style="margin-top:8px;color:var(--dim);font-size:13px">${esc(p.why)}</p></div></div>`).join('');
+  renderFix(); renderMyth();
+  $('#safe').innerHTML=SAFE.map(s=>`<div><span class="e">${s.e}</span><div><b>${s.t}</b><p>${s.d}</p></div></div>`).join('');
   const chips=(id,arr,key,multi)=>{ $(id).innerHTML=arr.map((t,i)=>`<button class="chip ${multi?(pbS[key].has(i)?'on':''):(pbS[key]===i?'on':'')}" data-i="${i}">${esc(t)}</button>`).join('');
     $(id).querySelectorAll('.chip').forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; if(multi){ pbS[key].has(i)?pbS[key].delete(i):pbS[key].add(i); } else pbS[key]=i; chips(id,arr,key,multi); buildPrompt(); }); };
   chips('#pbRole',PB.role,'role'); chips('#pbTask',PB.task,'task'); chips('#pbFmt',PB.fmt,'fmt'); chips('#pbLim',PB.lim,'lim',true);
   $('#pbCtx').oninput=buildPrompt; buildPrompt();
-  $('#pbCopy').onclick=()=>{ const t=$('#pbOut').textContent; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Промпт скопирован ✓')).catch(()=>toast('Выделите текст и скопируйте вручную')); };
-  reveal('#pairs .card');
+  $('#pbCopy').onclick=ev=>{ const t=$('#pbOut').textContent; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{ toast('Промпт скопирован ✓'); addXP('pbcopy',10,ev); }).catch(()=>toast('Выдели текст и скопируй вручную')); };
+  reveal('#pairs .card'); reveal('.steps4>div'); reveal('.safe>div');
+  initPoll('#pollAi');
 }
 function buildPrompt(){
-  const lim=[...pbS.lim].map(i=>PB.lim[i]);
-  $('#pbOut').textContent=`Ты - ${PB.role[pbS.role]}.\nЗадача: ${PB.task[pbS.task]}.\nКонтекст: ${$('#pbCtx').value.trim()}\nФормат ответа: ${PB.fmt[pbS.fmt]}.${lim.length?`\nОграничения: ${lim.join(', ')}.`:''}`;
+  const lim=[...pbS.lim].map(i=>PB.lim[i]), ctx=$('#pbCtx').value.trim();
+  $('#pbOut').textContent=`Ты - ${PB.role[pbS.role]}.\nЗадача: ${PB.task[pbS.task]}.\nКонтекст: ${ctx}\nФормат ответа: ${PB.fmt[pbS.fmt]}.${lim.length?`\nОграничения: ${lim.join(', ')}.`:''}`;
+  const sc=3+(ctx.length>15?1:0)+(lim.length?1:0); $('#pbScore').textContent='★'.repeat(sc)+'☆'.repeat(5-sc)+(sc===5?' - отличный промпт!':'');
   $('#pbOut').animate([{opacity:.4},{opacity:1}],{duration:300});
 }
 
@@ -744,7 +1297,9 @@ function setTheme(t){ document.documentElement.dataset.theme=t; try{localStorage
 let th='light'; try{ th=localStorage.getItem('irtysh_theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); }catch(e){} setTheme(th);
 $('#themeBtn').onclick=()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');
 
-renderHome();
+renderHome(); renderXP();
+(function hit(page){ try{ const k='irtysh_hit_'+page; if(sessionStorage.getItem(k)!==null) return; const d=new Date().toDateString(), fresh=!localStorage.getItem('irtysh_new_'+page), today=localStorage.getItem('irtysh_day_'+page)!==d;
+  fetch(API,{method:'POST', body:JSON.stringify({op:'hit', page, fresh, today})}).then(r=>r.json()).then(j=>{ if(!j.ok) return; localStorage.setItem('irtysh_new_'+page,'1'); localStorage.setItem('irtysh_day_'+page,d); sessionStorage.setItem(k,String(j.total||'')); }).catch(()=>{}); }catch(e){} })('agro');
 const h=location.hash.slice(1);
 if(h==='py'||h==='ai'){ show(h); h==='py'?initPy():initAI(); }
 else if(MODULES.some(m=>m.id===h)){ curMod=MODULES.find(m=>m.id===h); curTab=curMod.lessons.length?'lessons':'prac'; renderMod(); show('mod'); }
